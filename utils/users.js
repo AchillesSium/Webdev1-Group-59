@@ -56,7 +56,14 @@ const generateId = () => {
  */
 const emailInUse = email => {
   // TODO: 8.3 Check if there already exists a user with a given email
-  throw new Error('Not Implemented');
+  for(var i = 0; i < data.users.length; i++){
+    let user = data.users[i];
+    if(email == user.email){
+      return true;
+    }
+  }
+  return false;
+  
 };
 
 /**
