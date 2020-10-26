@@ -5,6 +5,8 @@
  * to store all data.
  */
 
+const { use } = require('chai');
+
 /**
  * Use this object to store users
  *
@@ -29,6 +31,8 @@ const resetUsers = () => {
   // make copies of users (prevents changing from outside this module/file)
   data.users = require('../users.json').map(user => ({ ...user }));
 };
+
+var demoUsers = data.users;
 
 /**
  * Generate a random string for use as user ID
@@ -56,14 +60,13 @@ const generateId = () => {
  */
 const emailInUse = email => {
   // TODO: 8.3 Check if there already exists a user with a given email
-  for(var i = 0; i < data.users.length; i++){
-    let user = data.users[i];
+  for(var i = 0; i < demoUsers.length; i++){
+    let user = demoUsers[i];
     if(email == user.email){
       return true;
     }
   }
   return false;
-  
 };
 
 /**
@@ -78,7 +81,13 @@ const emailInUse = email => {
  */
 const getUser = (email, password) => {
   // TODO: 8.3 Get user whose email and password match the provided values
-  throw new Error('Not Implemented');
+  for(var i = 0; i < demoUsers.length; i++){
+    let user = demoUsers[i];
+    if(email == user.email && password == user.password){
+      return user;
+    }
+  }
+  return null;
 };
 
 /**
@@ -92,7 +101,13 @@ const getUser = (email, password) => {
  */
 const getUserById = userId => {
   // TODO: 8.3 Find user by user id
-  throw new Error('Not Implemented');
+  for(var i = 0; i < demoUsers.length; i++){
+    let user = demoUsers[i];
+    if(user._id == userId){
+      return user;
+    }
+  }
+  return null;
 };
 
 /**
@@ -103,7 +118,14 @@ const getUserById = userId => {
  */
 const deleteUserById = userId => {
   // TODO: 8.3 Delete user with a given id
-  throw new Error('Not Implemented');
+  for(var i = 0; i < demoUsers.length; i++){
+    let user = demoUsers[i];
+    if(user._id == userId){
+      demoUsers.splice(i,1);
+      return user;
+    }
+  }
+  return null;
 };
 
 /**
@@ -116,7 +138,7 @@ const deleteUserById = userId => {
  */
 const getAllUsers = () => {
   // TODO: 8.3 Retrieve all users
-  throw new Error('Not Implemented');
+  return demoUsers;
 };
 
 /**
@@ -134,7 +156,9 @@ const getAllUsers = () => {
 const saveNewUser = user => {
   // TODO: 8.3 Save new user
   // Use generateId() to assign a unique id to the newly created user.
-  throw new Error('Not Implemented');
+  let id  = generateId()
+  user._id = id;
+  demoUsers.push(user)
 };
 
 /**
@@ -152,7 +176,15 @@ const saveNewUser = user => {
  */
 const updateUserRole = (userId, role) => {
   // TODO: 8.3 Update user's role
-  throw new Error('Not Implemented');
+  for(var i = 0; i < demoUsers.length; i++){
+    var user = demoUsers[i];
+    if(user.id == userId){
+      user.role = role;
+      demoUsers[i] = user;
+      return user;
+    }
+  }
+  return null;
 };
 
 /**
@@ -166,7 +198,20 @@ const updateUserRole = (userId, role) => {
  */
 const validateUser = user => {
   // TODO: 8.3 Validate user before saving
-  throw new Error('Not Implemented');
+  var errorMessages = [];
+  if(user.name.length <= 0){
+    errorMessages.push("User name required");
+  }else if(user._id.length <= 0){
+    errorMessages.push("User id required");
+  }else if(user.email.length <= 0){
+    errorMessages.push("User email required");
+  }else if(user.password.length <= 0){
+    errorMessages.push("User passsword required");
+  }else if(user.role.length <= 0){
+    errorMessages.push("User role required");
+  }
+
+  return errorMessages;
 };
 
 module.exports = {
