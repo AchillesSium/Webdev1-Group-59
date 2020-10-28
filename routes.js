@@ -93,7 +93,8 @@ const handleRequest = async (request, response) => {
   if (filePath === '/api/users' && method.toUpperCase() === 'GET') {
     // TODO: 8.3 Return all users as JSON
     // TODO: 8.4 Add authentication (only allowed to users with role "admin")
-    throw new Error('Not Implemented');
+    var users = getAllUsers();
+    return JSON.stringify(users);
   }
 
   // register new user
@@ -105,7 +106,8 @@ const handleRequest = async (request, response) => {
 
     // TODO: 8.3 Implement registration
     // You can use parseBodyJson(request) from utils/requestUtils.js to parse request body
-    throw new Error('Not Implemented');
+    let userBody = parseBodyJson(request);
+    let user = saveNewUser(userBody);
   }
 };
 

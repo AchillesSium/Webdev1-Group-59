@@ -20,7 +20,13 @@
  */
 const getJSON = async url => {
   // TODO: 8.3 Implement this
-  throw new Error('Not Implemented');
+  const response = await fetch(url);
+  return new Promise((resolve, reject) => {
+    if(response == null){
+      reject('No response');
+    }
+    resolve(response.json());
+  });
 };
 
 /**
@@ -41,7 +47,23 @@ const postOrPutJSON = async (url, method, data = {}) => {
   }
 
   // TODO: 8.3 Implement this
-  throw new Error('Not Implemented');
+  const settings = {
+    method: method,
+    body: data,
+    headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+    }
+  };
+  return new Promise((resolve, reject) => {
+    try {
+      const fetchResponse = await fetch(url, settings);
+      const data = await fetchResponse.json();
+      resolve(data);
+    } catch (e) {
+      reject(e);
+    }  
+  });
 };
 
 /**
