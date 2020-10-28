@@ -84,10 +84,11 @@ const getUser = (email, password) => {
   for(var i = 0; i < demoUsers.length; i++){
     let user = demoUsers[i];
     if(email == user.email && password == user.password){
-      return user;
+      var copyUser = JSON.parse(JSON.stringify(user));
+      return copyUser;
     }
   }
-  return null;
+  return undefined;
 };
 
 /**
@@ -104,10 +105,11 @@ const getUserById = userId => {
   for(var i = 0; i < demoUsers.length; i++){
     let user = demoUsers[i];
     if(user._id == userId){
-      return user;
+      var copyUser = JSON.parse(JSON.stringify(user));
+      return copyUser;
     }
   }
-  return null;
+  return undefined;
 };
 
 /**
@@ -125,7 +127,7 @@ const deleteUserById = userId => {
       return user;
     }
   }
-  return null;
+  return undefined;
 };
 
 /**
@@ -138,7 +140,8 @@ const deleteUserById = userId => {
  */
 const getAllUsers = () => {
   // TODO: 8.3 Retrieve all users
-  return demoUsers;
+  var copyAll = JSON.parse(JSON.stringify(demoUsers));
+  return copyAll;
 };
 
 /**
@@ -158,7 +161,10 @@ const saveNewUser = user => {
   // Use generateId() to assign a unique id to the newly created user.
   let id  = generateId()
   user._id = id;
-  demoUsers.push(user)
+  user.role = 'customer';
+  var copyUser = JSON.parse(JSON.stringify(user));
+  demoUsers.push(copyUser)
+  return copyUser;
 };
 
 /**
@@ -176,15 +182,19 @@ const saveNewUser = user => {
  */
 const updateUserRole = (userId, role) => {
   // TODO: 8.3 Update user's role
-  for(var i = 0; i < demoUsers.length; i++){
-    var user = demoUsers[i];
-    if(user.id == userId){
-      user.role = role;
-      demoUsers[i] = user;
-      return user;
+  if(data.roles.includes(role)){
+    for(var i = 0; i < demoUsers.length; i++){
+      //var user = demoUsers[i];
+      if(demoUsers[i]._id == userId){
+        demoUsers[i].role = role;
+        var copyUser = JSON.parse(JSON.stringify(demoUsers[i]));
+        return copyUser;
+      }
     }
   }
-  return null;
+  else throw new Error('Unknown role');
+
+  return undefined;
 };
 
 /**
@@ -199,16 +209,17 @@ const updateUserRole = (userId, role) => {
 const validateUser = user => {
   // TODO: 8.3 Validate user before saving
   var errorMessages = [];
-  if(user.name.length <= 0){
-    errorMessages.push("User name required");
-  }else if(user._id.length <= 0){
-    errorMessages.push("User id required");
-  }else if(user.email.length <= 0){
-    errorMessages.push("User email required");
-  }else if(user.password.length <= 0){
-    errorMessages.push("User passsword required");
-  }else if(user.role.length <= 0){
-    errorMessages.push("User role required");
+  if(user.name == undefined){
+    errorMessages.push("Missing name");
+  }
+  else if(user.email == undefined){
+    errorMessages.push("Missing email");
+  }
+  else if(user.password == undefined){
+    errorMessages.push("Missing password");
+  }
+  else if(!data.roles.includes(user.role) && user.role != undefined){
+    errorMessages.push("Unknown role");
   }
 
   return errorMessages;
