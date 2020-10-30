@@ -14,8 +14,28 @@
  *
  *       - Each cloned template fragment should be appended to <div id="users-container">
  *       - Use getJSON() function from utils.js to fetch user data from server
- *
- * TODO: 8.5 Updating/modifying and deleting existing users
+ */
+
+ let user_promise = getJSON('/api/users');
+ let userTemp = document.getElementById("user-template");
+ let userContain = document.getElementById("users-container");
+ user_promise.then(users => {
+     users.forEach(user => {
+         var clone = userTemp.content.cloneNode(true);
+         clone.querySelecto('.item-row').setAttribute('id', "user-"+user._id);
+         clone.querySelecto('.user-name').setAttribute('id', "name-"+user._id);
+         clone.querySelecto('.user-name').innerHTML = user.name;
+         clone.querySelecto('.user-email').setAttribute('id', "email-"+user._id);
+         clone.querySelecto('.user-email').innerHTML = user.email;
+         clone.querySelecto('.user-role').setAttribute('id', "role-"+user._id);
+         clone.querySelecto('.user-role').innerHTML = user.role;
+         clone.querySelecto('.modify-button').setAttribute('id', "modify-"+user._id);
+         clone.querySelecto('.delete-button').setAttribute('id', "delete-"+user._id);
+         userContain.append(clone);
+     });
+ });
+
+ /** TODO: 8.5 Updating/modifying and deleting existing users
  *       - Use postOrPutJSON() function from utils.js to send your data back to server
  *       - Use deleteResource() function from utils.js to delete users from server
  *       - Clicking "Delete" button of a user will delete the user and update the listing accordingly

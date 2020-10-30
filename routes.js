@@ -1,7 +1,8 @@
 const responseUtils = require('./utils/responseUtils');
 const { acceptsJson, isJson, parseBodyJson } = require('./utils/requestUtils');
 const { renderPublic } = require('./utils/render');
-const { emailInUse, getAllUsers, saveNewUser, validateUser } = require('./utils/users');
+const { emailInUse, getAllUsers, saveNewUser, validateUser, updateUserRole } = require('./utils/users');
+const { sendJson, badRequest, createdResource } = require('./utils/responseUtils');
 
 /**
  * Known API routes and their allowed methods
@@ -106,8 +107,20 @@ const handleRequest = async (request, response) => {
 
     // TODO: 8.3 Implement registration
     // You can use parseBodyJson(request) from utils/requestUtils.js to parse request body
-    let userBody = parseBodyJson(request);
-    let user = saveNewUser(userBody);
+    let userBody = await parseBodyJson(request);
+    let userError = validateUser(userBody);
+    if(userError.length){
+      return badRequest(response, "Bad Request");
+    }else{
+      if(emailInUse(userBody.email)){
+        return badRequest(response, "Bad Request");
+      }
+      var  new_user = saveNewUser(userBody);
+      if(new_user.role != 'customer'){
+        new_user = updateUserRole(new_user._id, 'customer')
+      }
+      return createdResource(response, new_user);
+    }
   }
 };
 

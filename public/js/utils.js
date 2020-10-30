@@ -51,8 +51,7 @@ const postOrPutJSON = async (url, method, data = {}) => {
     method: method,
     body: data,
     headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
     }
   };
   return new Promise((resolve, reject) => {
