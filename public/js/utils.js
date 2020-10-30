@@ -20,13 +20,7 @@
  */
 const getJSON = async url => {
   // TODO: 8.3 Implement this
-  const response = await fetch(url);
-  return new Promise((resolve, reject) => {
-    if(response == null){
-      reject('No response');
-    }
-    resolve(response.json());
-  });
+  return fetch(url).then(response => response.json());
 };
 
 /**
@@ -47,22 +41,13 @@ const postOrPutJSON = async (url, method, data = {}) => {
   }
 
   // TODO: 8.3 Implement this
-  const settings = {
+  return await fetch(url, {
     method: method,
-    body: data,
     headers: {
-        'Content-Type': 'application/json'
-    }
-  };
-  return new Promise((resolve, reject) => {
-    try {
-      const fetchResponse = await fetch(url, settings);
-      const data = await fetchResponse.json();
-      resolve(data);
-    } catch (e) {
-      reject(e);
-    }  
-  });
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data),
+  }).then(response => response.json());
 };
 
 /**

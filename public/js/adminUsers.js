@@ -22,15 +22,15 @@
  user_promise.then(users => {
      users.forEach(user => {
          var clone = userTemp.content.cloneNode(true);
-         clone.querySelecto('.item-row').setAttribute('id', "user-"+user._id);
-         clone.querySelecto('.user-name').setAttribute('id', "name-"+user._id);
-         clone.querySelecto('.user-name').innerHTML = user.name;
-         clone.querySelecto('.user-email').setAttribute('id', "email-"+user._id);
-         clone.querySelecto('.user-email').innerHTML = user.email;
-         clone.querySelecto('.user-role').setAttribute('id', "role-"+user._id);
-         clone.querySelecto('.user-role').innerHTML = user.role;
-         clone.querySelecto('.modify-button').setAttribute('id', "modify-"+user._id);
-         clone.querySelecto('.delete-button').setAttribute('id', "delete-"+user._id);
+         clone.querySelector('.item-row').setAttribute('id', "user-"+user._id);
+         clone.querySelector('.user-name').setAttribute('id', "name-"+user._id);
+         clone.querySelector('.user-name').innerHTML = user.name;
+         clone.querySelector('.user-email').setAttribute('id', "email-"+user._id);
+         clone.querySelector('.user-email').innerHTML = user.email;
+         clone.querySelector('.user-role').setAttribute('id', "role-"+user._id);
+         clone.querySelector('.user-role').innerHTML = user.role;
+         clone.querySelector('.modify-button').setAttribute('id', "modify-"+user._id);
+         clone.querySelector('.delete-button').setAttribute('id', "delete-"+user._id);
          userContain.append(clone);
      });
  });
