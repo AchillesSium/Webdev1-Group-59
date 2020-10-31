@@ -1,3 +1,6 @@
+const { getCredentials } = require("../utils/requestUtils");
+const { getUser } = require("../utils/users");
+
 /**
  * Get current user based on the request headers
  *
@@ -10,8 +13,19 @@ const getCurrentUser = async request => {
   // NOTE: You can use getCredentials(request) function from utils/requestUtils.js
   // and getUser(email, password) function from utils/users.js to get the currently
   // logged in user
-
-  throw new Error('Not Implemented');
+  var current = await getCredentials(request);
+  if(current == undefined){
+    return null;
+  }
+  var email = current.email;
+  var password = current.password;
+  var user = getUser(email, password);
+  if(user != undefined){
+    return user;
+  }
+  else{
+    return null;
+  }
 };
 
 module.exports = { getCurrentUser };
