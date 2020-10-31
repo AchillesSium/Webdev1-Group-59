@@ -16,11 +16,18 @@ const getCurrentUser = async request => {
   var current = await getCredentials(request);
   if(current == undefined){
     return null;
+  }else if(current == null){
+    return null;
+  }else if (current.length <= 1){
+    console.log('not properly encoded');
+    return null;
   }
-  var email = current.email;
-  var password = current.password;
+  var email = current[0];
+  var password = current[1];
+  console.log('email: '+email +' password: '+password);
   var user = getUser(email, password);
   if(user != undefined){
+    console.log('undeifned user');
     return user;
   }
   else{

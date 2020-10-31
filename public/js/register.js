@@ -17,6 +17,7 @@ form.onsubmit = function(){
         formData = {'name':name, 'email':email, 'password':pass};
         let responseJson = postOrPutJSON('/api/register', 'POST', formData);
         createNotification('Register Successfully!', 'notifications-container', true);
+        form.reset();
     }else{
         createNotification('Confirm Password not matched', 'notifications-container', true);
     }
