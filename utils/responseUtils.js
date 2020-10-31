@@ -1,6 +1,7 @@
 const basicAuthChallenge = response => {
   // TODO: 8.4 Send proper basic authentication challenge headers
-  throw new Error('Not Implemented');
+  response.writeHead(401, { 'WWW-Authenticate': 'Basic'});
+  return response.end();
 };
 
 const sendJson = (response, payload, code = 200) => {
@@ -26,7 +27,7 @@ const badRequest = (response, errorMsg) => {
 
 const unauthorized = response => {
   response.statusCode = 401;
-  return response.end();
+  return response.end("401 Unauthorized");
 };
 
 const forbidden = response => {
