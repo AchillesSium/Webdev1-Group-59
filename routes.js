@@ -1,9 +1,10 @@
 const responseUtils = require('./utils/responseUtils');
 const { acceptsJson, isJson, parseBodyJson } = require('./utils/requestUtils');
 const { renderPublic } = require('./utils/render');
-const { emailInUse, getAllUsers, saveNewUser, validateUser, updateUserRole, getUserById } = require('./utils/users');
-const { sendJson, badRequest, createdResource, basicAuthChallenge } = require('./utils/responseUtils');
+const { emailInUse, getAllUsers, saveNewUser, validateUser, updateUserRole, getUserById, deleteUserById } = require('./utils/users');
+const { sendJson, badRequest, createdResource, basicAuthChallenge, notFound } = require('./utils/responseUtils');
 const { getCurrentUser } = require('./auth/auth');
+const { use } = require('chai');
 
 /**
  * Known API routes and their allowed methods
@@ -72,7 +73,53 @@ const handleRequest = async (request, response) => {
   if (matchUserId(filePath)) {
     // TODO: 8.5 Implement view, update and delete a single user by ID (GET, PUT, DELETE)
     // You can use parseBodyJson(request) from utils/requestUtils.js to parse request body
-    throw new Error('Not Implemented');
+    let head_array = filePath.split('/');
+    let userId = head_array[3];
+    var user = await getUserById(userId);
+    if(user == null){
+      return notFound(response);
+    }
+    var currentUser = await getCurrentUser(request);
+    if(currentUser == null){
+      return basicAuthChallenge(response);
+    }if(currentUser.role != 'admin'){
+      return responseUtils.forbidden(response);
+    }
+
+    if(request.method == 'GET'){
+      if(currentUser.role == 'admin'){
+        var user = await getUserById(userId);
+        console.log('userID' + userId);
+        if(user == null){
+          return notFound(response);
+        }else{
+          return sendJson(response,user);
+        }
+      }
+    }
+
+    if(request.method == 'PUT'){
+      var body = await parseBodyJson(request);
+      let role = body.role;
+      if(role == undefined){
+        return badRequest(response, 'role is missing');
+      }else if (role != 'customer'){
+        if(role != 'admin'){
+          return badRequest(response, 'role is not valid');
+        }
+      }
+      if(currentUser.role == 'admin'){
+        var user = updateUserRole(userId,body.role);
+        return sendJson(response, user);
+      }
+    } 
+    
+    if(request.method == "DELETE"){
+      if(currentUser.role == 'admin'){
+        var user = deleteUserById(userId);
+        return sendJson(response, user);
+      }
+    }
   }
 
   // Default to 404 Not Found if unknown url

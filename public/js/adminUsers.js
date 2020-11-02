@@ -22,6 +22,7 @@
  user_promise.then(users => {
      users.forEach(user => {
          var clone = userTemp.content.cloneNode(true);
+         clone.id = user._id;
          clone.querySelector('.item-row').setAttribute('id', "user-"+user._id);
          clone.querySelector('.user-name').setAttribute('id', "name-"+user._id);
          clone.querySelector('.user-name').innerHTML = user.name;
@@ -29,8 +30,18 @@
          clone.querySelector('.user-email').innerHTML = user.email;
          clone.querySelector('.user-role').setAttribute('id', "role-"+user._id);
          clone.querySelector('.user-role').innerHTML = user.role;
-         clone.querySelector('.modify-button').setAttribute('id', "modify-"+user._id);
-         clone.querySelector('.delete-button').setAttribute('id', "delete-"+user._id);
+         clone.querySelector('.modify-button').addEventListener('click', function(){
+             //work here
+            alert(user.email);
+        });
+         clone.querySelector('.delete-button').addEventListener('click', function(){
+            let usr = deleteResourse('/api/users/'+user._id);
+            console.log(usr);
+            if(usr != null){
+                userContain.removeChild(clone);//work here
+                alert("Deleted user " + user.name);
+            }
+        });
          userContain.append(clone);
      });
  });
