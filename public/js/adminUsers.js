@@ -15,36 +15,29 @@
  *       - Each cloned template fragment should be appended to <div id="users-container">
  *       - Use getJSON() function from utils.js to fetch user data from server
  */
-
- let user_promise = getJSON('/api/users');
- let userTemp = document.getElementById("user-template");
- let userContain = document.getElementById("users-container");
- user_promise.then(users => {
-     users.forEach(user => {
-         var clone = userTemp.content.cloneNode(true);
-         clone.id = user._id;
-         clone.querySelector('.item-row').setAttribute('id', "user-"+user._id);
-         clone.querySelector('.user-name').setAttribute('id', "name-"+user._id);
-         clone.querySelector('.user-name').innerHTML = user.name;
-         clone.querySelector('.user-email').setAttribute('id', "email-"+user._id);
-         clone.querySelector('.user-email').innerHTML = user.email;
-         clone.querySelector('.user-role').setAttribute('id', "role-"+user._id);
-         clone.querySelector('.user-role').innerHTML = user.role;
-         clone.querySelector('.modify-button').addEventListener('click', function(){
-             //work here
-            alert(user.email);
+ function listUsers(){
+    let user_promise = getJSON('/api/users');
+    let userTemp = document.querySelector("#user-template");
+    let userContain = document.getElementById("users-container");
+    user_promise.then(users => {
+        users.forEach(user => {
+            var clone = userTemp.content.cloneNode(true);
+            clone.id = user._id;
+            clone.querySelector('.item-row').setAttribute('id', "user-"+user._id);
+            clone.querySelector('.user-name').setAttribute('id', "name-"+user._id);
+            clone.querySelector('.user-name').innerHTML = user.name;
+            clone.querySelector('.user-email').setAttribute('id', "email-"+user._id);
+            clone.querySelector('.user-email').innerHTML = user.email;
+            clone.querySelector('.user-role').setAttribute('id', "role-"+user._id);
+            clone.querySelector('.user-role').innerHTML = user.role;
+            clone.querySelector('.modify-button').setAttribute('id',"modify-"+user._id);
+            clone.querySelector('.modify-button').addEventListener("click", modifyUser);
+            clone.querySelector('.delete-button').setAttribute('id',"delete-"+user._id);
+            clone.querySelector('.delete-button').addEventListener("click", deleteUser);
+            userContain.appendChild(clone);
         });
-         clone.querySelector('.delete-button').addEventListener('click', function(){
-            let usr = deleteResourse('/api/users/'+user._id);
-            console.log(usr);
-            if(usr != null){
-                userContain.removeChild(clone);//work here
-                alert("Deleted user " + user.name);
-            }
-        });
-         userContain.append(clone);
-     });
- });
+    });
+ }
 
  /** TODO: 8.5 Updating/modifying and deleting existing users
  *       - Use postOrPutJSON() function from utils.js to send your data back to server
@@ -63,3 +56,42 @@
  *       - Deleting a user successfully should show a notification message "Deleted user {User Name}"
  *       - Use createNotification() function from utils.js to create notifications
  */
+
+ let formTemp = document.querySelector("#form-template");
+ let user_modify = document.getElementById("modify-user");
+
+ function modifyUser(){
+     removeElement("modify-user", "edit-user-form");
+     var formClone = formTemp.content.cloneNode(true);
+     const id = this.getAttribute("id").split("-")[1];
+     const username = this.parentNode.querySelector(".user-name").innerHTML;
+     const email = this.parentNode.querySelector(".user-email").innerHTML;
+     const role = this.parentNode.querySelector(".user-role").innerHTML;
+     formClone.querySelector("h2").innerHTML = "Modify User " + username;
+     formClone.querySelectorAll("input")[0].innerHTML = ("value", id);
+     formClone.querySelectorAll("input")[1].innerHTML = ("value", username);
+     formClone.querySelectorAll("input")[2].innerHTML = ("value", email);
+     formClone.querySelector("#update-button").addEventListener('click', updateUser);
+     user_modify.appendChild(formClone);
+ }
+
+ async function deleteUser(){
+     removeElement("modify-user", "edit-user-form");
+     const id = this.getAttribute("id").split("-")[1];
+     const deleted_user = await deleteResourse("api/users/"+id);
+     removeElement("user-container", "user-"+id);
+     createNotification("Deleted User "+deleted_user.name, "notifications-container");
+ }
+
+ async function updateUser(event){
+    event.preventDefault();
+    const form = this.parentNode.parentNode.parentNode;
+    const id = form.querySelector("#id-input").value;
+    const role = form.querySelector("#role-input").value;
+    const updated_user = await postOrPutJSON("api/users/"+id,"PUT",{'role':role});
+    removeElement("modify-user", "edit-user-form");
+    document.querySelector("#role-"+id).textContent = role;
+    createNotification("Updated User "+updated_user.name, "notifications-container");
+ }
+
+ listUsers();
