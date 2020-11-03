@@ -73,44 +73,52 @@ const handleRequest = async (request, response) => {
   if (matchUserId(filePath)) {
     // TODO: 8.5 Implement view, update and delete a single user by ID (GET, PUT, DELETE)
     // You can use parseBodyJson(request) from utils/requestUtils.js to parse request body
-    const currentUser = await getCurrentUser(request);
-    if(!currentUser){
-      return basicAuthChallenge(response);
-    }
-    else if(currentUser.role !== 'admin'){
-      return forbidden(response)
-    }
-
-    //Update or Delete method implementation
     let head_array = filePath.split('/');
     let userId = head_array[3];
-    if(method.toUpperCase() == 'GET'){
-        var user = await getUserById(userId);
-        if(user == undefined){
-          return notFound(response);
-        }else{
-          return sendJson(response, user);
-        }
+    var user = await getUserById(userId);
+    if(user == null){
+      return notFound(response);
+    }
+    var currentUser = await getCurrentUser(request);
+    if(currentUser == null){
+      return basicAuthChallenge(response);
+    }if(currentUser.role != 'admin'){
+      return responseUtils.forbidden(response);
     }
 
-    if(method.toUpperCase() == 'PUT'){
+    if(request.method == 'GET'){
+      if(currentUser.role == 'admin'){
+        var user = await getUserById(userId);
+        console.log('userID' + userId);
+        if(user == null){
+          return notFound(response);
+        }else{
+          return sendJson(response,user);
+        }
+      }
+    }
+
+    if(request.method == 'PUT'){
       var body = await parseBodyJson(request);
       let role = body.role;
       if(role == undefined){
         return badRequest(response, 'role is missing');
-      }else if (role != 'customer' || role != 'admin'){
+      }else if (role != 'customer'){
+        if(role != 'admin'){
           return badRequest(response, 'role is not valid');
         }
-      else{
+      }
+      if(currentUser.role == 'admin'){
         var user = updateUserRole(userId,body.role);
         return sendJson(response, user);
       }
     } 
     
-    if(method.toUpperCase() == "DELETE"){
+    if(request.method == "DELETE"){
+      if(currentUser.role == 'admin'){
         var user = deleteUserById(userId);
-        if(user == undefined) return notFound(response);
-        else return sendJson(response, user);
+        return sendJson(response, user);
+      }
     }
   }
 
