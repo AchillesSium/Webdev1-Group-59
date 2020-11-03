@@ -32,7 +32,7 @@ const resetUsers = () => {
   data.users = require('../users.json').map(user => ({ ...user }));
 };
 
-var demoUsers = data.users;
+const demoUsers = data.users;
 
 /**
  * Generate a random string for use as user ID
@@ -60,9 +60,9 @@ const generateId = () => {
  */
 const emailInUse = email => {
   // TODO: 8.3 Check if there already exists a user with a given email
-  for(var i = 0; i < demoUsers.length; i++){
-    let user = demoUsers[i];
-    if(email == user.email){
+  for(let i = 0; i < demoUsers.length; i++){
+    const user = demoUsers[i];
+    if(email === user.email){
       return true;
     }
   }
@@ -81,10 +81,10 @@ const emailInUse = email => {
  */
 const getUser = (email, password) => {
   // TODO: 8.3 Get user whose email and password match the provided values
-  for(var i = 0; i < demoUsers.length; i++){
-    let user = demoUsers[i];
-    if(email == user.email && password == user.password){
-      var copyUser = JSON.parse(JSON.stringify(user));
+  for(let i = 0; i < demoUsers.length; i++){
+    const user = demoUsers[i];
+    if(email === user.email && password === user.password){
+      const copyUser = JSON.parse(JSON.stringify(user));
       return copyUser;
     }
   }
@@ -102,10 +102,10 @@ const getUser = (email, password) => {
  */
 const getUserById = userId => {
   // TODO: 8.3 Find user by user id
-  for(var i = 0; i < demoUsers.length; i++){
-    let user = demoUsers[i];
-    if(user._id == userId){
-      var copyUser = JSON.parse(JSON.stringify(user));
+  for(let i = 0; i < demoUsers.length; i++){
+    const user = demoUsers[i];
+    if(user._id === userId){
+      const copyUser = JSON.parse(JSON.stringify(user));
       return copyUser;
     }
   }
@@ -120,10 +120,10 @@ const getUserById = userId => {
  */
 const deleteUserById = userId => {
   // TODO: 8.3 Delete user with a given id
-  for(var i = 0; i < demoUsers.length; i++){
-    let user = demoUsers[i];
-    if(user._id == userId){
-      demoUsers.splice(i,1);
+  for(let i = 0; i < demoUsers.length; i++){
+    const user = demoUsers[i];
+    if(user._id === userId){
+      demoUsers.splice(i, 1);
       return user;
     }
   }
@@ -140,7 +140,7 @@ const deleteUserById = userId => {
  */
 const getAllUsers = () => {
   // TODO: 8.3 Retrieve all users
-  var copyAll = JSON.parse(JSON.stringify(demoUsers));
+  const copyAll = JSON.parse(JSON.stringify(demoUsers));
   return copyAll;
 };
 
@@ -159,11 +159,11 @@ const getAllUsers = () => {
 const saveNewUser = user => {
   // TODO: 8.3 Save new user
   // Use generateId() to assign a unique id to the newly created user.
-  let id  = generateId()
+  const id  = generateId();
   user._id = id;
   user.role = 'customer';
-  var copyUser = JSON.parse(JSON.stringify(user));
-  demoUsers.push(copyUser)
+  const copyUser = JSON.parse(JSON.stringify(user));
+  demoUsers.push(copyUser);
   return copyUser;
 };
 
@@ -183,11 +183,11 @@ const saveNewUser = user => {
 const updateUserRole = (userId, role) => {
   // TODO: 8.3 Update user's role
   if(data.roles.includes(role)){
-    for(var i = 0; i < demoUsers.length; i++){
+    for(let i = 0; i < demoUsers.length; i++){
       //var user = demoUsers[i];
-      if(demoUsers[i]._id == userId){
+      if(demoUsers[i]._id === userId){
         demoUsers[i].role = role;
-        var copyUser = JSON.parse(JSON.stringify(demoUsers[i]));
+        const copyUser = JSON.parse(JSON.stringify(demoUsers[i]));
         return copyUser;
       }
     }
@@ -208,17 +208,17 @@ const updateUserRole = (userId, role) => {
  */
 const validateUser = user => {
   // TODO: 8.3 Validate user before saving
-  var errorMessages = [];
-  if(user.name == undefined){
+  const errorMessages = [];
+  if(user.name === undefined){
     errorMessages.push("Missing name");
   }
-  else if(user.email == undefined){
+  else if(user.email === undefined){
     errorMessages.push("Missing email");
   }
-  else if(user.password == undefined){
+  else if(user.password === undefined){
     errorMessages.push("Missing password");
   }
-  else if(!data.roles.includes(user.role) && user.role != undefined){
+  else if(!data.roles.includes(user.role) && user.role !== undefined){
     errorMessages.push("Unknown role");
   }
 

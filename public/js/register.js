@@ -7,15 +7,15 @@
  *       - Reset the form back to empty after successful registration
  *       - Use postOrPutJSON() function from utils.js to send your data back to server
  */
-var form = document.getElementById('register-form');
+const form = document.getElementById('register-form');
 form.onsubmit = function(){
-    var name = document.getElementById('name').value;
-    var email = document.getElementById('email').value;
-    var pass = document.getElementById('password').value;
-    var passConfirm = document.getElementById('passwordConfirmation').value;
-    if(pass.localeCompare(passConfirm) == 0){
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const pass = document.getElementById('password').value;
+    const passConfirm = document.getElementById('passwordConfirmation').value;
+    if(pass.localeCompare(passConfirm) === 0){
         formData = {'name':name, 'email':email, 'password':pass};
-        let responseJson = postOrPutJSON('/api/register', 'POST', formData);
+        const responseJson = postOrPutJSON('/api/register', 'POST', formData);
         createNotification('Register Successfully!', 'notifications-container', true);
         form.reset();
     }else{

@@ -12,19 +12,19 @@ const getCredentials = request => {
   //  See: https://attacomsian.com/blog/nodejs-base64-encode-decode
   //       https://stackabuse.com/encoding-and-decoding-base64-strings-in-node-js/
 
-  if(request.headers.authorization == null){
+  if(request.headers.authorization === null){
     return null;
   }
-  if(request.headers.authorization == undefined){
+  if(request.headers.authorization === undefined){
     return undefined;
   }
-  var header = request.headers.authorization;
-  const auth_head = header.split(' ');
+  const header = request.headers.authorization;
+  const authHead = header.split(' ');
 
-  if(auth_head[0] == 'Basic'){
-    const head = Buffer.from(auth_head[1], 'base64').toString();
-    let head_array = head.split(':');
-    return head_array;
+  if(authHead[0] === 'Basic'){
+    const head = Buffer.from(authHead[1], 'base64').toString();
+    const headArray = head.split(':');
+    return headArray;
   }else{
     return null;
   }
@@ -41,7 +41,7 @@ const acceptsJson = request => {
   // NOTE: "Accept" header format allows several comma separated values simultaneously
   // as in "text/html,application/xhtml+xml,application/json,application/xml;q=0.9,*/*;q=0.8"
   // Do not rely on the header value containing only single content type!
-  var acc = request.headers.accept;
+  const acc = request.headers.accept;
   if(!acc){
     return false;
   }else if(acc.includes('application/json') || acc.includes('*/*')){
@@ -59,7 +59,7 @@ const acceptsJson = request => {
  */
 const isJson = request => {
   // TODO: 8.3 Check whether request "Content-Type" is JSON or not
-  var type = request.headers['content-type'];
+  const type = request.headers['content-type'];
   if(!type){
     return false;
   }else if(type === 'application/json'){

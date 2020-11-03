@@ -15,13 +15,14 @@
  *       - Each cloned template fragment should be appended to <div id="users-container">
  *       - Use getJSON() function from utils.js to fetch user data from server
  */
+listUsers();
  function listUsers(){
-    let user_promise = getJSON('/api/users');
-    let userTemp = document.querySelector("#user-template");
-    let userContain = document.getElementById("users-container");
-    user_promise.then(users => {
+    const userPromise = getJSON('/api/users');
+    const userTemp = document.querySelector("#user-template");
+    const userContain = document.getElementById("users-container");
+    userPromise.then(users => {
         users.forEach(user => {
-            var clone = userTemp.content.cloneNode(true);  
+            const clone = userTemp.content.cloneNode(true);  
             clone.querySelector('.item-row').setAttribute('id', "user-"+user._id);
             clone.querySelector('.user-name').setAttribute('id', "name-"+user._id);
             clone.querySelector('.user-name').innerHTML = user.name;
@@ -56,12 +57,12 @@
  *       - Use createNotification() function from utils.js to create notifications
  */
 
- let formTemp = document.querySelector("#form-template");
- let user_modify = document.getElementById("modify-user");
+ const formTemp = document.querySelector("#form-template");
+ const userModify = document.getElementById("modify-user");
 
  function modifyUser(){
      removeElement("modify-user", "edit-user-form");
-     var formClone = formTemp.content.cloneNode(true);
+     const formClone = formTemp.content.cloneNode(true);
      const id = this.getAttribute("id").split("-")[1];
      const username = this.parentNode.querySelector(".user-name").innerHTML;
      const email = this.parentNode.querySelector(".user-email").innerHTML;
@@ -71,15 +72,15 @@
      formClone.querySelectorAll("input")[1].setAttribute("value", username);
      formClone.querySelectorAll("input")[2].setAttribute("value", email);
      formClone.querySelector("#update-button").addEventListener('click', updateUser);
-     user_modify.appendChild(formClone);
+     userModify.appendChild(formClone);
  }
 
  async function deleteUser(){
      removeElement("modify-user", "edit-user-form");
      const id = this.getAttribute("id").split("-")[1];
-     const deleted_user = await deleteResourse("api/users/"+id);
+     const deletedUser = await deleteResourse("api/users/"+id);
      removeElement("user-container", "user-"+id);
-     createNotification("Deleted User "+deleted_user.name, "notifications-container");
+     createNotification("Deleted User "+deletedUser.name, "notifications-container");
  }
 
  async function updateUser(event){
@@ -87,10 +88,8 @@
     const form = this.parentNode.parentNode.parentNode;
     const id = form.querySelector("#id-input").value;
     const role = form.querySelector("#role-input").value;
-    const updated_user = await postOrPutJSON("api/users/"+id,"PUT",{'role':role});
+    const updatedUser = await postOrPutJSON("api/users/"+id,"PUT",{'role':role});
     removeElement("modify-user", "edit-user-form");
     document.querySelector("#role-"+id).textContent = role;
-    createNotification("Updated User "+updated_user.name, "notifications-container");
+    createNotification("Updated User "+updatedUser.name, "notifications-container");
  }
-
- listUsers();

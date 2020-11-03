@@ -73,51 +73,51 @@ const handleRequest = async (request, response) => {
   if (matchUserId(filePath)) {
     // TODO: 8.5 Implement view, update and delete a single user by ID (GET, PUT, DELETE)
     // You can use parseBodyJson(request) from utils/requestUtils.js to parse request body
-    let head_array = filePath.split('/');
-    let userId = head_array[3];
-    var user = await getUserById(userId);
-    if(user == null){
+    const headArray = filePath.split('/');
+    const userId = headArray[3];
+    const usre = await getUserById(userId);
+    if(usre === null){
       return notFound(response);
     }
-    var currentUser = await getCurrentUser(request);
-    if(currentUser == null){
+    const currentUser = await getCurrentUser(request);
+    if(currentUser === null){
       return basicAuthChallenge(response);
-    }if(currentUser.role != 'admin'){
+    }if(currentUser.role !== 'admin'){
       return responseUtils.forbidden(response);
     }
 
-    if(request.method == 'GET'){
-      if(currentUser.role == 'admin'){
-        var user = await getUserById(userId);
+    if(request.method === 'GET'){
+      if(currentUser.role === 'admin'){
+        const userg = await getUserById(userId);
         console.log('userID' + userId);
-        if(user == null){
+        if(userg === null){
           return notFound(response);
         }else{
-          return sendJson(response,user);
+          return sendJson(response,userg);
         }
       }
     }
 
-    if(request.method == 'PUT'){
-      var body = await parseBodyJson(request);
-      let role = body.role;
-      if(role == undefined){
+    if(request.method === 'PUT'){
+      const body = await parseBodyJson(request);
+      const role = body.role;
+      if(role === undefined){
         return badRequest(response, 'role is missing');
-      }else if (role != 'customer'){
-        if(role != 'admin'){
+      }else if (role !== 'customer'){
+        if(role !== 'admin'){
           return badRequest(response, 'role is not valid');
         }
       }
-      if(currentUser.role == 'admin'){
-        var user = updateUserRole(userId,body.role);
+      if(currentUser.role === 'admin'){
+        const user = updateUserRole(userId,body.role);
         return sendJson(response, user);
       }
     } 
     
-    if(request.method == "DELETE"){
-      if(currentUser.role == 'admin'){
-        var user = deleteUserById(userId);
-        return sendJson(response, user);
+    if(request.method === "DELETE"){
+      if(currentUser.role === 'admin'){
+        const userd = deleteUserById(userId);
+        return sendJson(response, userd);
       }
     }
   }
@@ -142,13 +142,13 @@ const handleRequest = async (request, response) => {
   if (filePath === '/api/users' && method.toUpperCase() === 'GET') {
     // TODO: 8.3 Return all users as JSON
     // TODO: 8.4 Add authentication (only allowed to users with role "admin") 
-    var currentUser = await getCurrentUser(request);
-    if(currentUser == null){
+    const currentUsera = await getCurrentUser(request);
+    if(currentUsera === null){
       return basicAuthChallenge(response);
-    }else if(currentUser.role != 'admin'){
+    }else if(currentUsera.role !== 'admin'){
       return responseUtils.forbidden(response);
-    }else if(currentUser.role == 'admin'){
-      var users = await getAllUsers();
+    }else if(currentUsera.role === 'admin'){
+      const users = await getAllUsers();
       return sendJson(response, users);
     }
     return responseUtils.basicAuthChallenge(response);
@@ -163,19 +163,19 @@ const handleRequest = async (request, response) => {
 
     // TODO: 8.3 Implement registration
     // You can use parseBodyJson(request) from utils/requestUtils.js to parse request body
-    let userBody = await parseBodyJson(request);
-    let userError = validateUser(userBody);
+    const userBody = await parseBodyJson(request);
+    const userError = validateUser(userBody);
     if(userError.length){
       return badRequest(response, "Bad Request");
     }else{
       if(emailInUse(userBody.email)){
         return badRequest(response, "Bad Request");
       }
-      var  new_user = saveNewUser(userBody);
-      if(new_user.role != 'customer'){
-        new_user = updateUserRole(new_user._id, 'customer')
+      let newUser = saveNewUser(userBody);
+      if(newUser.role !== 'customer'){
+        newUser = updateUserRole(newUser._id, 'customer');
       }
-      return createdResource(response, new_user);
+      return createdResource(response, newUser);
     }
   }
 };
