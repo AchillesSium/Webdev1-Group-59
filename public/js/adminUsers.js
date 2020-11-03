@@ -21,8 +21,7 @@
     let userContain = document.getElementById("users-container");
     user_promise.then(users => {
         users.forEach(user => {
-            var clone = userTemp.content.cloneNode(true);
-            clone.id = user._id;
+            var clone = userTemp.content.cloneNode(true);  
             clone.querySelector('.item-row').setAttribute('id', "user-"+user._id);
             clone.querySelector('.user-name').setAttribute('id', "name-"+user._id);
             clone.querySelector('.user-name').innerHTML = user.name;
@@ -68,9 +67,9 @@
      const email = this.parentNode.querySelector(".user-email").innerHTML;
      const role = this.parentNode.querySelector(".user-role").innerHTML;
      formClone.querySelector("h2").innerHTML = "Modify User " + username;
-     formClone.querySelectorAll("input")[0].innerHTML = ("value", id);
-     formClone.querySelectorAll("input")[1].innerHTML = ("value", username);
-     formClone.querySelectorAll("input")[2].innerHTML = ("value", email);
+     formClone.querySelectorAll("input")[0].setAttribute("value", id);
+     formClone.querySelectorAll("input")[1].setAttribute("value", username);
+     formClone.querySelectorAll("input")[2].setAttribute("value", email);
      formClone.querySelector("#update-button").addEventListener('click', updateUser);
      user_modify.appendChild(formClone);
  }
