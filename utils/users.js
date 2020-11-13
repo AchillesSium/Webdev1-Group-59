@@ -5,8 +5,6 @@
  * to store all data.
  */
 
-const { use } = require('chai');
-
 /**
  * Use this object to store users
  *
@@ -17,7 +15,8 @@ const { use } = require('chai');
 const data = {
   // make copies of users (prevents changing from outside this module/file)
   users: require('../users.json').map(user => ({ ...user })),
-  roles: ['customer', 'admin']
+  roles: ['customer', 'admin'],
+  products: require('../products.json').map(product => ({ ...product }))
 };
 
 /**
@@ -30,9 +29,11 @@ const data = {
 const resetUsers = () => {
   // make copies of users (prevents changing from outside this module/file)
   data.users = require('../users.json').map(user => ({ ...user }));
+  data.products = require('../products.json').map(product => ({ ...product }));
 };
 
 var demoUsers = data.users;
+var demoProducts = data.products;
 
 /**
  * Generate a random string for use as user ID
@@ -120,14 +121,15 @@ const getUserById = userId => {
  */
 const deleteUserById = userId => {
   // TODO: 8.3 Delete user with a given id
-  for(var i = 0; i < demoUsers.length; i++){
-    let user = demoUsers[i];
-    if(user._id == userId){
-      demoUsers.splice(i,1);
-      return user;
-    }
+  var user_Index = undefined;
+  var user_Index = data.users.findIndex((obj => obj._id == userId));
+  if (user_Index != undefined && user_Index != -1){
+    var new_User = data.users[user_Index];
+    data.users.splice(user_Index , 1);
+    return new_User;
+  }else{
+    return undefined;
   }
-  return undefined;
 };
 
 /**
@@ -140,8 +142,13 @@ const deleteUserById = userId => {
  */
 const getAllUsers = () => {
   // TODO: 8.3 Retrieve all users
-  var copyAll = JSON.parse(JSON.stringify(demoUsers));
-  return copyAll;
+  var usersCopy = JSON.parse(JSON.stringify(data.users));
+  return usersCopy;
+};
+
+const getAllProducts = () => {
+  var copyProducts = JSON.parse(JSON.stringify(demoProducts));
+  return copyProducts;
 };
 
 /**
@@ -229,6 +236,7 @@ module.exports = {
   deleteUserById,
   emailInUse,
   getAllUsers,
+  getAllProducts,
   getUser,
   getUserById,
   resetUsers,
