@@ -5,8 +5,6 @@
  * to store all data.
  */
 
-const { use } = require('chai');
-
 /**
  * Use this object to store users
  *
@@ -32,8 +30,12 @@ const resetUsers = () => {
   data.users = require('../users.json').map(user => ({ ...user }));
 };
 
+<<<<<<< HEAD
 const demoUsers = data.users;
 
+=======
+var demoUsers = data.users;
+>>>>>>> f2ccc4312f260053df5b1dbd5bc7243d705195c3
 /**
  * Generate a random string for use as user ID
  * @returns {string}
@@ -120,14 +122,24 @@ const getUserById = userId => {
  */
 const deleteUserById = userId => {
   // TODO: 8.3 Delete user with a given id
+<<<<<<< HEAD
   for(let i = 0; i < demoUsers.length; i++){
     const user = demoUsers[i];
     if(user._id === userId){
       demoUsers.splice(i, 1);
       return user;
     }
+=======
+  var user_Index = undefined;
+  var user_Index = data.users.findIndex((obj => obj._id == userId));
+  if (user_Index != undefined && user_Index != -1){
+    var new_User = data.users[user_Index];
+    data.users.splice(user_Index , 1);
+    return new_User;
+  }else{
+    return undefined;
+>>>>>>> f2ccc4312f260053df5b1dbd5bc7243d705195c3
   }
-  return undefined;
 };
 
 /**
@@ -140,9 +152,15 @@ const deleteUserById = userId => {
  */
 const getAllUsers = () => {
   // TODO: 8.3 Retrieve all users
+<<<<<<< HEAD
   const copyAll = JSON.parse(JSON.stringify(demoUsers));
   return copyAll;
+=======
+  var usersCopy = JSON.parse(JSON.stringify(data.users));
+  return usersCopy;
+>>>>>>> f2ccc4312f260053df5b1dbd5bc7243d705195c3
 };
+
 
 /**
  * Save new user
@@ -159,11 +177,18 @@ const getAllUsers = () => {
 const saveNewUser = user => {
   // TODO: 8.3 Save new user
   // Use generateId() to assign a unique id to the newly created user.
+<<<<<<< HEAD
   const id  = generateId();
   user._id = id;
   user.role = 'customer';
   const copyUser = JSON.parse(JSON.stringify(user));
   demoUsers.push(copyUser);
+=======
+  user.role = 'customer';
+  user._id  = generateId();
+  var copyUser = JSON.parse(JSON.stringify(user));
+  data.users.push(copyUser);
+>>>>>>> f2ccc4312f260053df5b1dbd5bc7243d705195c3
   return copyUser;
 };
 

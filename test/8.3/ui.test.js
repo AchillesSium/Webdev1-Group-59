@@ -9,9 +9,13 @@ chai.use(chaiHttp);
 
 // helper function for creating randomized test data
 const generateRandomString = (len = 9) => {
-  return Math.random()
-    .toString(36)
-    .substr(2, len);
+  let str = '';
+
+  do {
+    str += Math.random().toString(36).substr(2, 9).trim();
+  } while (str.length < len);
+
+  return str.substr(0, len);
 };
 
 const shortWaitTime = 200;
@@ -57,7 +61,10 @@ describe('User Inteface', () => {
     browser && browser.close();
   });
 
-  beforeEach(() => resetUsers());
+  beforeEach(async () => {
+    resetUsers();
+    await page.authenticate({ username: adminUser.email, password: adminUser.password });
+  });
 
   describe('UI: List all users', () => {
     it('should list all users when navigating to "/users.html"', async () => {

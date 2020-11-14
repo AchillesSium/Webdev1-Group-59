@@ -1,10 +1,10 @@
 const responseUtils = require('./utils/responseUtils');
-const { acceptsJson, isJson, parseBodyJson } = require('./utils/requestUtils');
+const usersUtils = require('./utils/users');
+const requestUtils = require('./utils/requestUtils');
+const productUtils = require('./utils/products');
+const { acceptsJson, isJson } = require('./utils/requestUtils');
 const { renderPublic } = require('./utils/render');
-const { emailInUse, getAllUsers, saveNewUser, validateUser, updateUserRole, getUserById, deleteUserById } = require('./utils/users');
-const { sendJson, badRequest, createdResource, basicAuthChallenge, notFound, forbidden } = require('./utils/responseUtils');
-const { getCurrentUser } = require('./auth/auth');
-const { use } = require('chai');
+const auth = require('./auth/auth');
 
 /**
  * Known API routes and their allowed methods
@@ -14,7 +14,8 @@ const { use } = require('chai');
  */
 const allowedMethods = {
   '/api/register': ['POST'],
-  '/api/users': ['GET']
+  '/api/users': ['GET'],
+  '/api/products': ['GET']
 };
 
 /**
@@ -73,6 +74,7 @@ const handleRequest = async (request, response) => {
   if (matchUserId(filePath)) {
     // TODO: 8.5 Implement view, update and delete a single user by ID (GET, PUT, DELETE)
     // You can use parseBodyJson(request) from utils/requestUtils.js to parse request body
+<<<<<<< HEAD
     const headArray = filePath.split('/');
     const userId = headArray[3];
     const usre = await getUserById(userId);
@@ -119,6 +121,39 @@ const handleRequest = async (request, response) => {
         const userd = deleteUserById(userId);
         return sendJson(response, userd);
       }
+=======
+    const currentUser = await auth.getCurrentUser(request);
+    if(!currentUser){
+      return responseUtils.basicAuthChallenge(response);
+    }
+    else if(currentUser.role !== 'admin'){
+      return responseUtils.forbidden(response);
+    }
+
+    //Update or Delete method implementation
+    //let head_array = filePath.split('/');
+    let userId = url.split('/').pop();
+    if(method.toUpperCase() == 'GET'){
+      var user = await usersUtils.getUserById(userId);
+      if(user === undefined) return responseUtils.notFound(response);
+      else return responseUtils.sendJson(response, user);
+    }
+    else if(method.toUpperCase() == 'PUT'){
+      var body = await requestUtils.parseBodyJson(request);
+      //let role = body.role;
+      try {
+        const updated_user = usersUtils.updateUserRole(userId, body.role);
+        if(updated_user === undefined) return responseUtils.notFound(response);
+        else return responseUtils.sendJson(response, updated_user);
+      } catch (error) {
+        return responseUtils.badRequest(response);
+      }
+    } 
+    else if(method.toUpperCase() === "DELETE"){
+      var deleted_user = usersUtils.deleteUserById(userId);
+      if(deleted_user == undefined) return responseUtils.notFound(response);
+      else return responseUtils.sendJson(response, deleted_user);
+>>>>>>> f2ccc4312f260053df5b1dbd5bc7243d705195c3
     }
   }
 
@@ -142,6 +177,7 @@ const handleRequest = async (request, response) => {
   if (filePath === '/api/users' && method.toUpperCase() === 'GET') {
     // TODO: 8.3 Return all users as JSON
     // TODO: 8.4 Add authentication (only allowed to users with role "admin") 
+<<<<<<< HEAD
     const currentUsera = await getCurrentUser(request);
     if(currentUsera === null){
       return basicAuthChallenge(response);
@@ -150,8 +186,23 @@ const handleRequest = async (request, response) => {
     }else if(currentUsera.role === 'admin'){
       const users = await getAllUsers();
       return sendJson(response, users);
+=======
+    var currentUser = await auth.getCurrentUser(request);
+    if(!currentUser){
+      return responseUtils.basicAuthChallenge(response);
+>>>>>>> f2ccc4312f260053df5b1dbd5bc7243d705195c3
     }
-    return responseUtils.basicAuthChallenge(response);
+    else if(currentUser.role === "admin"){
+      return responseUtils.sendJson(response, usersUtils.getAllUsers());
+    }
+    else return responseUtils.forbidden(response);
+  }
+
+  if (filePath === '/api/products' && method.toUpperCase() === 'GET') {
+    var currentUser = await auth.getCurrentUser(request);
+    if(currentUser == null) return responseUtils.basicAuthChallenge(response);
+    var products = await productUtils.getAllProducts();
+    return responseUtils.sendJson(response, products);
   }
 
   // register new user
@@ -163,19 +214,33 @@ const handleRequest = async (request, response) => {
 
     // TODO: 8.3 Implement registration
     // You can use parseBodyJson(request) from utils/requestUtils.js to parse request body
+<<<<<<< HEAD
     const userBody = await parseBodyJson(request);
     const userError = validateUser(userBody);
+=======
+    let userBody = await requestUtils.parseBodyJson(request);
+    let userError = usersUtils.validateUser(userBody);
+    let userEmail = usersUtils.emailInUse(userBody.email);
+>>>>>>> f2ccc4312f260053df5b1dbd5bc7243d705195c3
     if(userError.length){
-      return badRequest(response, "Bad Request");
+      return responseUtils.badRequest(response, "Bad Request");
     }else{
-      if(emailInUse(userBody.email)){
-        return badRequest(response, "Bad Request");
+      if(userEmail){
+        return responseUtils.badRequest(response, "Bad Request");
       }
+<<<<<<< HEAD
       let newUser = saveNewUser(userBody);
       if(newUser.role !== 'customer'){
         newUser = updateUserRole(newUser._id, 'customer');
       }
       return createdResource(response, newUser);
+=======
+      var  new_user = usersUtils.saveNewUser(userBody);
+      if(new_user.role != 'customer'){
+        new_user = usersUtils.updateUserRole(new_user._id, 'customer')
+      }
+      return responseUtils.createdResource(response, new_user);
+>>>>>>> f2ccc4312f260053df5b1dbd5bc7243d705195c3
     }
   }
 };
