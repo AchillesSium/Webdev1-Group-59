@@ -159,11 +159,22 @@ const getAllUsers = () => {
 const saveNewUser = user => {
   // TODO: 8.3 Save new user
   // Use generateId() to assign a unique id to the newly created user.
+  const id  = generateId()
+  console.log(id);
+  user._id  = id;
   user.role = 'customer';
-  user._id  = generateId();
+  console.log(user._id, user.role);
   var copyUser = JSON.parse(JSON.stringify(user));
-  data.users.push(copyUser);
+  demoUsers.push(copyUser);
   return copyUser;
+
+  // let id  = generateId()
+  // user._id = id;
+  // user.role = 'customer';
+  // var copyUser = JSON.parse(JSON.stringify(user));
+  // userDta.push(copyUser);
+  // //console.log(userDta);
+  // return copyUser;
 };
 
 /**

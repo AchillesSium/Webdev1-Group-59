@@ -163,7 +163,7 @@ const handleRequest = async (request, response) => {
       if(userEmail){
         return responseUtils.badRequest(response, "Bad Request");
       }
-      var  new_user = usersUtils.saveNewUser(userBody);
+      var  new_user = await usersUtils.saveNewUser(userBody);
       if(new_user.role != 'customer'){
         new_user = usersUtils.updateUserRole(new_user._id, 'customer')
       }
