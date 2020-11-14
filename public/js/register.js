@@ -13,13 +13,14 @@ form.onsubmit = function(){
     var email = document.getElementById('email').value;
     var pass = document.getElementById('password').value;
     var passConfirm = document.getElementById('passwordConfirmation').value;
+    let formData;
     if(pass.localeCompare(passConfirm) == 0){
         formData = {'name':name, 'email':email, 'password':pass};
         let responseJson = postOrPutJSON('/api/register', 'POST', formData);
-        createNotification('Register Successfully!', 'notifications-container', true);
         form.reset();
+        createNotification('Register Successfully!', 'notifications-container', true);
     }else{
-        createNotification('Confirm Password not matched', 'notifications-container', true);
+        createNotification('Confirm Password not matched', 'notifications-container', false);
     }
 };
 

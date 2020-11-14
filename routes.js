@@ -1,6 +1,7 @@
 const responseUtils = require('./utils/responseUtils');
 const usersUtils = require('./utils/users');
 const requestUtils = require('./utils/requestUtils');
+const productUtils = require('./utils/products');
 const { acceptsJson, isJson } = require('./utils/requestUtils');
 const { renderPublic } = require('./utils/render');
 const auth = require('./auth/auth');
@@ -140,7 +141,7 @@ const handleRequest = async (request, response) => {
   if (filePath === '/api/products' && method.toUpperCase() === 'GET') {
     var currentUser = await auth.getCurrentUser(request);
     if(currentUser == null) return responseUtils.basicAuthChallenge(response);
-    var products = await usersUtils.getAllProducts();
+    var products = await productUtils.getAllProducts();
     return responseUtils.sendJson(response, products);
   }
 

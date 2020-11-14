@@ -15,8 +15,7 @@
 const data = {
   // make copies of users (prevents changing from outside this module/file)
   users: require('../users.json').map(user => ({ ...user })),
-  roles: ['customer', 'admin'],
-  products: require('../products.json').map(product => ({ ...product }))
+  roles: ['customer', 'admin']
 };
 
 /**
@@ -29,12 +28,9 @@ const data = {
 const resetUsers = () => {
   // make copies of users (prevents changing from outside this module/file)
   data.users = require('../users.json').map(user => ({ ...user }));
-  data.products = require('../products.json').map(product => ({ ...product }));
 };
 
 var demoUsers = data.users;
-var demoProducts = data.products;
-
 /**
  * Generate a random string for use as user ID
  * @returns {string}
@@ -146,10 +142,6 @@ const getAllUsers = () => {
   return usersCopy;
 };
 
-const getAllProducts = () => {
-  var copyProducts = JSON.parse(JSON.stringify(demoProducts));
-  return copyProducts;
-};
 
 /**
  * Save new user
@@ -166,11 +158,10 @@ const getAllProducts = () => {
 const saveNewUser = user => {
   // TODO: 8.3 Save new user
   // Use generateId() to assign a unique id to the newly created user.
-  let id  = generateId()
-  user._id = id;
   user.role = 'customer';
+  user._id  = generateId();
   var copyUser = JSON.parse(JSON.stringify(user));
-  demoUsers.push(copyUser)
+  data.users.push(copyUser);
   return copyUser;
 };
 
@@ -236,7 +227,6 @@ module.exports = {
   deleteUserById,
   emailInUse,
   getAllUsers,
-  getAllProducts,
   getUser,
   getUserById,
   resetUsers,
