@@ -12,10 +12,10 @@ const getCredentials = request => {
   //  See: https://attacomsian.com/blog/nodejs-base64-encode-decode
   //       https://stackabuse.com/encoding-and-decoding-base64-strings-in-node-js/
 
-  if(request.headers.authorization === null){
+  if(request.headers.authorization == null){
     return null;
   }
-  if(request.headers.authorization === undefined){
+  if(request.headers.authorization == undefined){
     return undefined;
   }
   const header = request.headers.authorization;
