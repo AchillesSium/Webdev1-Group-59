@@ -9,7 +9,6 @@
  */
 const form = document.getElementById('register-form');
 form.onsubmit = function(){
-<<<<<<< HEAD
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     const pass = document.getElementById('password').value;
@@ -18,16 +17,6 @@ form.onsubmit = function(){
         formData = {'name':name, 'email':email, 'password':pass};
         const responseJson = postOrPutJSON('/api/register', 'POST', formData);
         createNotification('Register Successfully!', 'notifications-container', true);
-=======
-    var name = document.getElementById('name').value;
-    var email = document.getElementById('email').value;
-    var pass = document.getElementById('password').value;
-    var passConfirm = document.getElementById('passwordConfirmation').value;
-    let formData;
-    if(pass.localeCompare(passConfirm) == 0){
-        formData = {'name':name, 'email':email, 'password':pass};
-        let responseJson = postOrPutJSON('/api/register', 'POST', formData);
->>>>>>> f2ccc4312f260053df5b1dbd5bc7243d705195c3
         form.reset();
         createNotification('Register Successfully!', 'notifications-container', true);
     }else{

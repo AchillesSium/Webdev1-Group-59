@@ -13,30 +13,18 @@ const getCurrentUser = async request => {
   // NOTE: You can use getCredentials(request) function from utils/requestUtils.js
   // and getUser(email, password) function from utils/users.js to get the currently
   // logged in user
-<<<<<<< HEAD
-  const current = await getCredentials(request);
-  if(current === undefined){
-=======
   var current = await requestUtils.getCredentials(request);
   if(current == undefined){
->>>>>>> f2ccc4312f260053df5b1dbd5bc7243d705195c3
     return null;
   }else if(current === null){
     return null;
   }else if (current.length <= 1){
     return null;
   }
-<<<<<<< HEAD
-  const email = current[0];
-  const password = current[1];
-  const user = getUser(email, password);
-  if(user !== undefined){
-=======
   var email = current[0];
   var password = current[1];
   var user = userUtils.getUser(email, password);
   if(user != undefined){
->>>>>>> f2ccc4312f260053df5b1dbd5bc7243d705195c3
     return user;
   }
   else{
