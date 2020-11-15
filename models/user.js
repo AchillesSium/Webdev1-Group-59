@@ -2,18 +2,84 @@ const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+function validator_name (val) {
+	if (val.length < 1 || val.length > 50) {
+		return false;
+	}
+	else if (val.substring(0,1) == ' ' || val.substring(val.length-1, val.length) == ' '){
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
+
+function validator_email(val) {
+	const re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+	return re.test(String(val).toLowerCase());
+}
+
+
+function validator_role (val) {
+	if (val !== 'customer' && val !== 'admin') {
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
+
+function validator_password (val) {
+	if (val.length < 10 || !val || val == '') {
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
+
 const userSchema = new Schema({
   // TODO: 9.4 Implement this
-  name : { type: String, required: true, minlength: 1, maxlength: 50, trim: true},
-  email : { type: String, required: true, match: "/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/"},
-  password : { type: String, required: true, minlength: 10, trim: true, set:encryptSetter },
-  role : { type: String, lowercase: true, enum: ['admin', 'customer'], default: 'customer', trim: true}
-});
+  
+	name: {
+			type: String,
+			trim: true,
+			validate: validator_name,			
+			required: true
+	},
+	
+	email: {
+			type: String,
+			validate: validator_email,
+			required: true,
+			index: { unique: true }
+	},
+	
+	password: {
+			type: String,
+			required: true,
+			validate: validator_password,	
+			set: v => {if (v.length < 10 || !v || v == '') {
+						return v;
+						}
+						else {
+						return bcrypt.hashSync(v, bcrypt.genSaltSync(10));
+						}
+			}
+	},
+	
+	role: {
+			type: String,
+			lowercase: true,
+			trim: true,
+			default: 'customer',
+			validate: validator_role
+	}
 
-function encryptSetter(password){
-  if(password.length < 10 || password === undefined || password === null) return password;
-  return bcrypt.hashSync(password);
-}
+});
 
 /**
  * Compare supplied password with user's own (hashed) password
@@ -23,7 +89,9 @@ function encryptSetter(password){
  */
 userSchema.methods.checkPassword = async function (password) {
   // TODO: 9.4 Implement this
-  return await bcrypt.compare(password, this.password);
+  
+	return bcrypt.compare(password, this.password);
+  
 };
 
 // Omit the version key when serialized to JSON
