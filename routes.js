@@ -78,14 +78,13 @@ const handleRequest = async (request, response) => {
 
     if (currentUser == null) {
       return responseUtils.basicAuthChallenge(response);
-    }
-
-    else if (currentUser.role !== 'admin') {
+    }else if (currentUser.role === 'customer') {
       return responseUtils.forbidden(response);
-    }
-
-    else if (currentUser.role == 'admin' && await currentUser.checkPassword(await getCredentials(request)[1])) {
-
+    }else if (currentUser.role == 'admin') {
+      const pass_check = await currentUser.checkPassword(await getCredentials(request)[1]);
+      if(pass_check === false){
+        return responseUtils.basicAuthChallenge(response);
+      }
       const usrid = filePath.split('/');
       const user = await User.findById(usrid[usrid.length - 1]).exec();
 
@@ -137,13 +136,12 @@ const handleRequest = async (request, response) => {
 
     if (currentUser == null) {
       return responseUtils.basicAuthChallenge(response);
-    } else if (currentUser.role !== 'admin') {
+    } else if (currentUser.role === 'customer') {
       return responseUtils.forbidden(response);
     } else if (currentUser.role == 'admin' && await currentUser.checkPassword(await getCredentials(request)[1])) {
       var users = await User.find({});
       return responseUtils.sendJson(response, users);
-    }
-    else {
+    }else {
       return responseUtils.basicAuthChallenge(response);
     }
 
@@ -159,7 +157,10 @@ const handleRequest = async (request, response) => {
     // TODO: 8.3 Implement registration
     // You can use parseBodyJson(request) from utils/requestUtils.js to parse request body
     let userBody = await parseBodyJson(request);
-    
+    const emailUser = await User.findOne({ email: userBody.email }).exec();
+    if(emailUser){
+      return responseUtils.badRequest(response, "Bad Request");
+    }
 
     const userData = {
       name: userBody.name,
