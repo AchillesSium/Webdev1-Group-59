@@ -25,7 +25,7 @@ const getCurrentUser = async request => {
   var password = current[1];
   const user = await User.findOne({ email: current[0]}).exec();
   //var user = userUtils.getUser(email, password);
-  if(user != undefined){
+  if(user != null){
     return user;
   }
   else{
