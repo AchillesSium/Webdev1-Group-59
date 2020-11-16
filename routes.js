@@ -1,10 +1,8 @@
 const responseUtils = require('./utils/responseUtils');
-const usersUtils = require('./utils/users');
-const requestUtils = require('./utils/requestUtils');
-const productUtils = require('./utils/products');
-const { acceptsJson, isJson } = require('./utils/requestUtils');
+const { acceptsJson, isJson, parseBodyJson, getCredentials } = require('./utils/requestUtils');
 const { renderPublic } = require('./utils/render');
-const auth = require('./auth/auth');
+const { getCurrentUser } = require('./auth/auth');
+const { getAllProducts } = require('./controllers/products');
 const User = require('./models/user');
 
 /**
@@ -77,11 +75,16 @@ const handleRequest = async (request, response) => {
     // You can use parseBodyJson(request) from utils/requestUtils.js to parse request body
 
     var currentUser = await getCurrentUser(request);
+
     if (currentUser == null) {
       return responseUtils.basicAuthChallenge(response);
-    }else if (currentUser.role !== 'admin') {
+    }
+
+    else if (currentUser.role !== 'admin') {
       return responseUtils.forbidden(response);
-    }else if (currentUser.role == 'admin' && await currentUser.checkPassword(await getCredentials(request)[1])) {
+    }
+
+    else if (currentUser.role == 'admin' && await currentUser.checkPassword(await getCredentials(request)[1])) {
 
       const usrid = filePath.split('/');
       const user = await User.findById(usrid[usrid.length - 1]).exec();
@@ -96,12 +99,12 @@ const handleRequest = async (request, response) => {
         const requestBody = await parseBodyJson(request);
         if (!requestBody.role || (requestBody.role !== 'customer' && requestBody.role !== 'admin')) {
           return responseUtils.badRequest(response, "Bad Request");
-        }else {
+        } else {
           user.role = requestBody.role;
           await user.save();
           return responseUtils.sendJson(response, user);
         }
-      } else if (method === 'DELETE') {
+      }else if (method === 'DELETE') {
         await User.deleteOne({ email: user.email });
         return responseUtils.sendJson(response, user);
       }
@@ -123,31 +126,28 @@ const handleRequest = async (request, response) => {
   }
 
   // Require a correct accept header (require 'application/json' or '*/*')
-  if (!acceptsJson(request)) {
+  if (await !acceptsJson(request)) {
     return responseUtils.contentTypeNotAcceptable(response);
   }
 
   // GET all users
   if (filePath === '/api/users' && method.toUpperCase() === 'GET') {
-    // TODO: 8.3 Return all users as JSON
-    // TODO: 8.4 Add authentication (only allowed to users with role "admin") 
-    var currentUser = await auth.getCurrentUser(request);
-    if (!currentUser) {
+
+    var currentUser = await getCurrentUser(request);
+
+    if (currentUser == null) {
       return responseUtils.basicAuthChallenge(response);
-    }
-    else if (currentUser.role == 'admin' && await currentUser.checkPassword(await getCredentials(request)[1])) {
+    } else if (currentUser.role !== 'admin') {
+      return responseUtils.forbidden(response);
+    } else if (currentUser.role == 'admin' && await currentUser.checkPassword(await getCredentials(request)[1])) {
       var users = await User.find({});
       return responseUtils.sendJson(response, users);
     }
-    else return responseUtils.forbidden(response);
-  }
+    else {
+      return responseUtils.basicAuthChallenge(response);
+    }
 
-  // if (filePath === '/api/products' && method.toUpperCase() === 'GET') {
-  //   var currentUser = await auth.getCurrentUser(request);
-  //   if(currentUser == null) return responseUtils.basicAuthChallenge(response);
-  //   var products = await productUtils.getAllProducts();
-  //   return responseUtils.sendJson(response, products);
-  // }
+  }
 
   // register new user
   if (filePath === '/api/register' && method.toUpperCase() === 'POST') {
@@ -158,21 +158,9 @@ const handleRequest = async (request, response) => {
 
     // TODO: 8.3 Implement registration
     // You can use parseBodyJson(request) from utils/requestUtils.js to parse request body
-    let userBody = await requestUtils.parseBodyJson(request);
-    // let userError = usersUtils.validateUser(userBody);
-    // let userEmail = usersUtils.emailInUse(userBody.email);
-    // if(userError.length){
-    //   return responseUtils.badRequest(response, "Bad Request");
-    // }else{
-    //   if(userEmail){
-    //     return responseUtils.badRequest(response, "Bad Request");
-    //   }
-    //   var  new_user = await usersUtils.saveNewUser(userBody);
-    //   if(new_user.role != 'customer'){
-    //     new_user = usersUtils.updateUserRole(new_user._id, 'customer')
-    //   }
-    //   return responseUtils.createdResource(response, new_user);
-    // }
+    let userBody = await parseBodyJson(request);
+    
+
     const userData = {
       name: userBody.name,
       email: userBody.email,
@@ -192,29 +180,21 @@ const handleRequest = async (request, response) => {
 
   // Returning products
   if (filePath === '/api/products' && method.toUpperCase() === 'GET') {
-
     var currentUser = await getCurrentUser(request);
-
     if (currentUser == null || !(await currentUser.checkPassword(await getCredentials(request)[1]))) {
       return responseUtils.basicAuthChallenge(response);
-    }
-    else if (headers['accept'] == null) {
+    }else if (headers['accept'] == null) {
       return responseUtils.contentTypeNotAcceptable(response);
-    }
-    else if (headers['accept'] !== 'application/json') {
+    }else if (headers['accept'] !== 'application/json') {
       return responseUtils.contentTypeNotAcceptable(response);
-    }
-    else if (currentUser.role !== 'admin' && currentUser.role !== 'customer') {
+    }else if (currentUser.role !== 'admin' && currentUser.role !== 'customer') { 
       return responseUtils.forbidden(response);
-    }
-    else if (currentUser.role == 'admin' || currentUser.role == 'customer') {
+    }else if (currentUser.role == 'admin' || currentUser.role == 'customer') {
       var users = await getAllProducts();
       return responseUtils.sendJson(response, users);
-    }
-    else {
+    }else {
       return responseUtils.basicAuthChallenge(response);
     }
-
   }
 };
 
