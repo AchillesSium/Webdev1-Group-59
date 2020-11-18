@@ -21,16 +21,13 @@ const getCurrentUser = async request => {
   }else if (current.length <= 1){
     return null;
   }
-  var email = current[0];
-  var password = current[1];
+
   const user = await User.findOne({ email: current[0]}).exec();
   //var user = userUtils.getUser(email, password);
   if(user != null){
-    return user;
+    if(await user.checkPassword(current[1])) return user;
   }
-  else{
-    return null;
-  }
+  else return null;
 };
 
 module.exports = { getCurrentUser };
