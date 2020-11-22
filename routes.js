@@ -108,7 +108,7 @@ const handleRequest = async (request, response) => {
     //update user
     else if (method.toUpperCase() === 'PUT') {
       const requestBody = await parseBodyJson(request);
-      return updateUser(response, user_id, currentUser, requestBody);
+      return await updateUser(response, user_id, currentUser, requestBody);
     }
     //delete a user
     else if (method.toUpperCase() === 'DELETE') {

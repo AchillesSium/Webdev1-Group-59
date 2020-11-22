@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const { sendJson, badRequest, createdResource, notFound } = require('../utils/responseUtils');
+const responseUtils = require('../utils/responseUtils');
 
 /**
  * Send all users as JSON
@@ -40,19 +41,39 @@ const deleteUser = async (response, userId, currentUser) => {
  */
 const updateUser = async (response, userId, currentUser, userData) => {
   // TODO: 10.1 Implement this
-  if(userId === currentUser.id){
-    return badRequest(response, "Bad Request");
-  }else{
-    const update_user = await User.findById(userId).exec();
-    if(!update_user) return notFound(response);
-    try{
-      update_user.role = userData.role;
-      await update_user.save();
-      return sendJson(response, update_user);
-    }catch(err){
-      return badRequest(response, "Bad Request");
-    }
-  }
+  // if(userId === currentUser.id){
+  //   return badRequest(response, "Bad Request");
+  // }else{
+  //   const update_user = await User.findById(userId).exec();
+  //   if(!update_user) return notFound(response);
+  //   try{
+  //     update_user.role = userData.role;
+  //     await update_user.save();
+  //     return sendJson(response, update_user);
+  //   }catch(err){
+  //     return badRequest(response, "Bad Request");
+  //   }
+  // }
+  if(currentUser.role !== 'admin'){
+		return responseUtils.forbidden(response); 
+	}
+	if (!userData.role || (userData.role !== 'customer' && userData.role !== 'admin')) {
+		return responseUtils.badRequest(response, "Bad Request");
+	}
+	if (userId == currentUser.id) {
+		return responseUtils.badRequest(response, "Updating own data is not allowed");
+	}
+	if(currentUser.role == 'admin'){
+		let user = await User.findById(userId).exec();
+		if (!user) {
+			return responseUtils.notFound(response);
+		}
+		else {
+			user.role = userData.role;
+			await user.save();
+			return responseUtils.sendJson(response, user);
+		}
+	}
 };
 
 /**
@@ -64,9 +85,21 @@ const updateUser = async (response, userId, currentUser, userData) => {
  */
 const viewUser = async (response, userId, currentUser) => {
   // TODO: 10.1 Implement this
-  const onload = await User.findById(userId).exec();
-  if(!onload) return notFound(response);
-  return sendJson(response, onload);
+  // const onload = await User.findById(userId).exec();
+  // if(!onload) return notFound(response);
+  // return sendJson(response, onload);
+  if(currentUser.role !== 'admin'){
+		return responseUtils.forbidden(response); 
+    }
+	if(currentUser.role == 'admin'){
+		const user = await User.findById(userId).exec();
+		if (!user) {
+			return responseUtils.notFound(response);
+		}
+		else {
+			return responseUtils.sendJson(response, user);
+		}
+	}
 };
 
 /**
@@ -76,6 +109,7 @@ const viewUser = async (response, userId, currentUser) => {
  * @param {Object} userData JSON data from request body
  */
 const registerUser = async (response, userData) => {
+  // TODO: 10.1 Implement this
   try{
     const new_user = new User(userData);
     new_user.role = 'customer';
