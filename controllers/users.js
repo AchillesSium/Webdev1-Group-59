@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const { sendJson, badRequest, createdResource, notFound } = require('../utils/responseUtils');
+const { sendJson, badRequest, createdResource, notFound, forbidden } = require('../utils/responseUtils');
 const responseUtils = require('../utils/responseUtils');
 
 /**
@@ -55,7 +55,7 @@ const updateUser = async (response, userId, currentUser, userData) => {
   //   }
   // }
   if(currentUser.role !== 'admin'){
-		return responseUtils.forbidden(response); 
+		return forbidden(response); 
 	}
 	if (!userData.role || (userData.role !== 'customer' && userData.role !== 'admin')) {
 		return responseUtils.badRequest(response, "Bad Request");
@@ -89,7 +89,7 @@ const viewUser = async (response, userId, currentUser) => {
   // if(!onload) return notFound(response);
   // return sendJson(response, onload);
   if(currentUser.role !== 'admin'){
-		return responseUtils.forbidden(response); 
+		return forbidden(response); 
     }
 	if(currentUser.role == 'admin'){
 		const user = await User.findById(userId).exec();

@@ -11,7 +11,7 @@ const getAllProducts = async response => {
   // return responseUtils.sendJson(response, onload);
   const products = await require("../products.json");
   var copyproducts = products;
-  return responseUtils.sendJson(response, copyproducts)
+  return responseUtils.sendJson(response, copyproducts);
 };
 
 module.exports = { getAllProducts };
