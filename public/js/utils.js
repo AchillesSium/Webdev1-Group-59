@@ -20,7 +20,6 @@
  */
 const getJSON = async url => {
   // TODO: 8.3 Implement this
-  console.log(url);
   return fetch(url).then(response => response.json());
 };
 
