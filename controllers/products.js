@@ -10,8 +10,8 @@ const getAllProducts = async response => {
   // const onload = await Product.find({});
   // return responseUtils.sendJson(response, onload);
   const products = await require("../products.json");
-  var copyproducts = products;
-  return responseUtils.sendJson(response, copyproducts);
+  const getproducts = products;
+  return responseUtils.sendJson(response, getproducts);
 };
 
 module.exports = { getAllProducts };

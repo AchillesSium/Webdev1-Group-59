@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const { sendJson, badRequest, createdResource, notFound, forbidden } = require('../utils/responseUtils');
+const { sendJson, badRequest, createdResource, notFound } = require('../utils/responseUtils');
 const responseUtils = require('../utils/responseUtils');
 
 /**
@@ -54,14 +54,14 @@ const updateUser = async (response, userId, currentUser, userData) => {
   //     return badRequest(response, "Bad Request");
   //   }
   // }
-  if(currentUser.role !== 'admin'){
-		return forbidden(response); 
+  if (userId == currentUser.id) {
+		return responseUtils.badRequest(response, "Updating own data is not allowed");
 	}
 	if (!userData.role || (userData.role !== 'customer' && userData.role !== 'admin')) {
 		return responseUtils.badRequest(response, "Bad Request");
 	}
-	if (userId == currentUser.id) {
-		return responseUtils.badRequest(response, "Updating own data is not allowed");
+	if(currentUser.role !== 'admin'){
+		return responseUtils.forbidden(response); 
 	}
 	if(currentUser.role == 'admin'){
 		let user = await User.findById(userId).exec();
@@ -89,8 +89,8 @@ const viewUser = async (response, userId, currentUser) => {
   // if(!onload) return notFound(response);
   // return sendJson(response, onload);
   if(currentUser.role !== 'admin'){
-		return forbidden(response); 
-    }
+		return responseUtils.forbidden(response); 
+  }
 	if(currentUser.role == 'admin'){
 		const user = await User.findById(userId).exec();
 		if (!user) {
