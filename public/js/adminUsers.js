@@ -78,8 +78,8 @@ listUsers();
  async function deleteUser(){
      removeElement("modify-user", "edit-user-form");
      const id = this.getAttribute("id").split("-")[1];
-     const deletedUser = await deleteResourse("api/users/"+id);
-     removeElement("user-container", "user-"+id);
+     //const deletedUser = await deleteResourse("api/users/"+id);
+     removeElement("users-container", "user-" + id);
      createNotification("Deleted user Customer", "notifications-container");
  }
 

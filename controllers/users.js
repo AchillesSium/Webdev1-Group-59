@@ -57,13 +57,13 @@ const updateUser = async (response, userId, currentUser, userData) => {
   if(currentUser.role !== 'admin'){
 		return forbidden(response); 
 	}
-	if (!userData.role || (userData.role !== 'customer' && userData.role !== 'admin')) {
+	else if (!userData.role || (userData.role !== 'customer' && userData.role !== 'admin')) {
 		return responseUtils.badRequest(response, "Bad Request");
 	}
-	if (userId == currentUser.id) {
+	else if (userId == currentUser.id) {
 		return responseUtils.badRequest(response, "Updating own data is not allowed");
 	}
-	if(currentUser.role == 'admin'){
+	else if(currentUser.role == 'admin'){
 		let user = await User.findById(userId).exec();
 		if (!user) {
 			return responseUtils.notFound(response);
@@ -91,7 +91,7 @@ const viewUser = async (response, userId, currentUser) => {
   if(currentUser.role !== 'admin'){
 		return forbidden(response); 
     }
-	if(currentUser.role == 'admin'){
+	else if(currentUser.role == 'admin'){
 		const user = await User.findById(userId).exec();
 		if (!user) {
 			return responseUtils.notFound(response);
