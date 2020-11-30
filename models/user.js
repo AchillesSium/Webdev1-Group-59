@@ -84,14 +84,11 @@ const userSchema = new Schema({
 /**
  * Compare supplied password with user's own (hashed) password
  *
- * @param {string} password
+ * @param {string} password incoming user password
  * @returns {Promise<boolean>} promise that resolves to the comparison result
  */
 userSchema.methods.checkPassword = async function (password) {
-  // TODO: 9.4 Implement this
-  
 	return bcrypt.compare(password, this.password);
-  
 };
 
 // Omit the version key when serialized to JSON
