@@ -5,10 +5,10 @@ const responseUtils = require('../utils/responseUtils');
 /**
  * Send all users as JSON
  *
- * @param {http.ServerResponse} response
+ * @param {http.ServerResponse} response send response to user
  */
 const getAllUsers = async response => {
-  // TODO: 10.1 Implement this
+
   const onload = await User.find({});
   return sendJson(response, onload);
 };
@@ -16,12 +16,12 @@ const getAllUsers = async response => {
 /**
  * Delete user and send deleted user as JSON
  *
- * @param {http.ServerResponse} response
- * @param {string} userId
- * @param {Object} currentUser (mongoose document object)
+ * @param {http.ServerResponse} response send response to user
+ * @param {string} userId incomming ID of user to be deleted
+ * @param {object} currentUser (mongoose document object) requesting user
  */
 const deleteUser = async (response, userId, currentUser) => {
-  // TODO: 10.1 Implement this
+  
   const delete_user = await User.findById(userId).exec();
   if(!delete_user) return notFound(response);
   else if(userId === currentUser.id){
@@ -34,13 +34,13 @@ const deleteUser = async (response, userId, currentUser) => {
 /**
  * Update user and send updated user as JSON
  *
- * @param {http.ServerResponse} response
- * @param {string} userId
- * @param {Object} currentUser (mongoose document object)
- * @param {Object} userData JSON data from request body
+ * @param {http.ServerResponse} response send response to user
+ * @param {string} userId user to be updated
+ * @param {object} currentUser (mongoose document object) requesting user
+ * @param {object} userData JSON data from request body
  */
 const updateUser = async (response, userId, currentUser, userData) => {
-  // TODO: 10.1 Implement this
+
   // if(userId === currentUser.id){
   //   return badRequest(response, "Bad Request");
   // }else{
@@ -79,12 +79,12 @@ const updateUser = async (response, userId, currentUser, userData) => {
 /**
  * Send user data as JSON
  *
- * @param {http.ServerResponse} response
- * @param {string} userId
- * @param {Object} currentUser (mongoose document object)
+ * @param {http.ServerResponse} response send response to user
+ * @param {string} userId requesting user ID
+ * @param {object} currentUser (mongoose document object) requesting user
  */
 const viewUser = async (response, userId, currentUser) => {
-  // TODO: 10.1 Implement this
+  
   // const onload = await User.findById(userId).exec();
   // if(!onload) return notFound(response);
   // return sendJson(response, onload);
@@ -105,11 +105,11 @@ const viewUser = async (response, userId, currentUser) => {
 /**
  * Register new user and send created user back as JSON
  *
- * @param {http.ServerResponse} response
- * @param {Object} userData JSON data from request body
+ * @param {http.ServerResponse} response send response to user
+ * @param {object} userData JSON data from request body
  */
 const registerUser = async (response, userData) => {
-  // TODO: 10.1 Implement this
+  
   try{
     const new_user = new User(userData);
     new_user.role = 'customer';
