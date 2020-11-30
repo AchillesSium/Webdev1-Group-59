@@ -54,9 +54,10 @@ function clearProductList() {
 }
 
 function clearCart(){
-    for(item in sessionStorage){
-        sessionStorage.removeItem(item);
-    }
+    // for(item in sessionStorage){
+    //     sessionStorage.removeItem(item);
+    // }
+    sessionStorage = [];
     clearProductList();
 }
 

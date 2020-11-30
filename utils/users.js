@@ -5,6 +5,8 @@
  * to store all data.
  */
 
+const { use } = require('chai');
+
 /**
  * Use this object to store users
  *
@@ -37,18 +39,31 @@ const demoUsers = data.users;
  * @returns {string} return a string
  */
 const generateId = () => {
-  let id;
+  var id;
 
-  do {
+  // do {
     // Generate unique random id that is not already in use
     // Shamelessly borrowed from a Gist. See:
     // https://gist.github.com/gordonbrander/2230317
 
     id = Math.random().toString(36).substr(2, 9);
-  } while (data.users.some(u => u._id === id));
+    id = getRandomId(id);
+    
+  //} while (data.users.some(u => u._id === id));
 
   return id;
 };
+
+
+function getRandomId(id){
+  const idinuse = data.users.filter(user => user._id === id);
+  if(idinuse.length > 0){
+    const id = Math.random().toString(36).substr(2, 9);
+    getRandomId(id);
+  }else{
+    return id;
+  }
+}
 
 /**
  * Check if email is already in use by another user
@@ -58,11 +73,9 @@ const generateId = () => {
  */
 const emailInUse = email => {
   // TODO: 8.3 Check if there already exists a user with a given email
-  for(let i = 0; i < demoUsers.length; i++){
-    const user = demoUsers[i];
-    if(email === user.email){
-      return true;
-    }
+  const inuse = demoUsers.filter(user => user.email == email);
+  if (inuse.length > 0) {
+    return true;
   }
   return false;
 };
@@ -79,12 +92,16 @@ const emailInUse = email => {
  */
 const getUser = (email, password) => {
   // TODO: 8.3 Get user whose email and password match the provided values
-  for(let i = 0; i < demoUsers.length; i++){
-    const user = demoUsers[i];
-    if(email === user.email && password === user.password){
-      const copyUser = JSON.parse(JSON.stringify(user));
-      return copyUser;
-    }
+  // for(let i = 0; i < demoUsers.length; i++){
+  //   const user = demoUsers[i];
+  //   if(email === user.email && password === user.password){
+  //     const copyUser = JSON.parse(JSON.stringify(user));
+  //     return copyUser;
+  //   }
+  // }
+  const copy_user = demoUsers.filter(user => user.email === email && user.password === password);
+  if(copy_user.length > 1){
+    return copy_user;
   }
   return undefined;
 };
@@ -100,12 +117,16 @@ const getUser = (email, password) => {
  */
 const getUserById = userId => {
   // TODO: 8.3 Find user by user id
-  for(let i = 0; i < demoUsers.length; i++){
-    const user = demoUsers[i];
-    if(user._id === userId){
-      const copyUser = JSON.parse(JSON.stringify(user));
-      return copyUser;
-    }
+  // for(let i = 0; i < demoUsers.length; i++){
+  //   const user = demoUsers[i];
+  //   if(user._id === userId){
+  //     const copyUser = JSON.parse(JSON.stringify(user));
+  //     return copyUser;
+  //   }
+  // }
+  const user = demoUsers.filter(user => user._id === userId);
+  if(user.length > 0){
+    return user;
   }
   return undefined;
 };
@@ -193,14 +214,21 @@ const saveNewUser = user => {
 const updateUserRole = (userId, role) => {
   // TODO: 8.3 Update user's role
   if(data.roles.includes(role)){
-    for(let i = 0; i < demoUsers.length; i++){
-      //var user = demoUsers[i];
-      if(demoUsers[i]._id === userId){
-        demoUsers[i].role = role;
-        const copyUser = JSON.parse(JSON.stringify(demoUsers[i]));
-        return copyUser;
+    // for(let i = 0; i < demoUsers.length; i++){
+    //   //var user = demoUsers[i];
+    //   if(demoUsers[i]._id === userId){
+    //     demoUsers[i].role = role;
+    //     const copyUser = JSON.parse(JSON.stringify(demoUsers[i]));
+    //     return copyUser;
+    //   }
+    // }
+    demoUsers.forEach(function(user, i){
+      if (user._id === userId){
+        user.role = role;
+        demoUsers[i] = user
       }
-    }
+    });
+
   }
   else throw new Error('Unknown role');
 
