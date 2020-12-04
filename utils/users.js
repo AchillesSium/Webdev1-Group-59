@@ -38,15 +38,16 @@ const demoUsers = data.users;
  * @returns {string} return a string
  */
 const generateId = () => {
-  let id;
+  var id;
 
-  do {
+  //do {
     // Generate unique random id that is not already in use
     // Shamelessly borrowed from a Gist. See:
     // https://gist.github.com/gordonbrander/2230317
 
     id = Math.random().toString(36).substr(2, 9);
-  } while (data.users.some(u => u._id === id));
+    id = getRandomId(id)
+  //} while (data.users.some(u => u._id === id));
 
   return id;
 };
