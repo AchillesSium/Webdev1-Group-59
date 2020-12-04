@@ -99,20 +99,20 @@ const handleRequest = async (request, response) => {
     if (!checkAuth(response, currentUser, 'admin')) return;
 
     //Get user ID from coming url
-    const user_id = url.split('/').pop();
+    const userId = url.split('/').pop();
 
     //return user if it exists
     if (method.toUpperCase() === 'GET') {
-      return viewUser(response, user_id, currentUser);
+      return viewUser(response, userId, currentUser);
     }
     //update user
     else if (method.toUpperCase() === 'PUT') {
       const requestBody = await parseBodyJson(request);
-      return await updateUser(response, user_id, currentUser, requestBody);
+      return await updateUser(response, userId, currentUser, requestBody);
     }
     //delete a user
     else if (method.toUpperCase() === 'DELETE') {
-      return deleteUser(response, user_id, currentUser);
+      return deleteUser(response, userId, currentUser);
     }
   }
 /*
@@ -126,16 +126,16 @@ const handleRequest = async (request, response) => {
 
     //Return product if ID exists
     if (method.toUpperCase() === 'GET') {
-      return viewUser(response, user_id, currentUser);
+      return viewUser(response, userId, currentUser);
     }
     //Update a product
     else if (method.toUpperCase() === 'PUT') {
       const requestBody = await parseBodyJson(request);
-      return updateUser(response, user_id, currentUser, requestBody);
+      return updateUser(response, userId, currentUser, requestBody);
     }
     //delete a product
     else if (method.toUpperCase() === 'DELETE') {
-      return deleteUser(response, user_id, currentUser);
+      return deleteUser(response, userId, currentUser);
     }
   }
 */
@@ -169,7 +169,7 @@ const handleRequest = async (request, response) => {
     }
 
     // You can use parseBodyJson(request) from utils/requestUtils.js to parse request body
-    let userBody = await parseBodyJson(request);
+    const userBody = await parseBodyJson(request);
     //try to save the new user request
     if(userBody !== null){
       return registerUser(response, userBody);

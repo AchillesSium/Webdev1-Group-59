@@ -5,9 +5,9 @@ const data = {
 };
 //Function to get all products and then return a copy of products
 const getAllProducts = () => {
-    var copyProducts = JSON.parse(JSON.stringify(data.products));
+    const copyProducts = JSON.parse(JSON.stringify(data.products));
     return copyProducts; 
-}
+};
 
 module.exports = {
     getAllProducts

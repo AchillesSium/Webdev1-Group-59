@@ -13,12 +13,12 @@ const getCurrentUser = async request => {
   // NOTE: You can use getCredentials(request) function from utils/requestUtils.js
   // and getUser(email, password) function from utils/users.js to get the currently
   // logged in user
-  var current = await requestUtils.getCredentials(request);
+  const current = await requestUtils.getCredentials(request);
   if(!current) return null;
   
   //Find current user from database and return that user if credentials are not null
   const user = await User.findOne({ email: current[0]}).exec();
-  if(user != null){
+  if(user !== null){
     if(await user.checkPassword(current[1])) return user;
     else return null;
   }

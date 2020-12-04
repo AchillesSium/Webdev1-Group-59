@@ -2,11 +2,11 @@ const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-function validator_name (val) {
+function validatorName (val) {
 	if (val.length < 1 || val.length > 50) {
 		return false;
 	}
-	else if (val.substring(0,1) == ' ' || val.substring(val.length-1, val.length) == ' '){
+	else if (val.substring(0, 1) === ' ' || val.substring(val.length-1, val.length) === ' '){
 		return false;
 	}
 	else {
@@ -15,13 +15,13 @@ function validator_name (val) {
 }
 
 
-function validator_email(val) {
+function validatorEmail(val) {
 	const re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 	return re.test(String(val).toLowerCase());
 }
 
 
-function validator_role (val) {
+function validatorRole (val) {
 	if (val !== 'customer' && val !== 'admin') {
 		return false;
 	}
@@ -31,8 +31,8 @@ function validator_role (val) {
 }
 
 
-function validator_password (val) {
-	if (val.length < 10 || !val || val == '') {
+function validatorPassword (val) {
+	if (val.length < 10 || !val || val === '') {
 		return false;
 	}
 	else {
@@ -47,13 +47,13 @@ const userSchema = new Schema({
 	name: {
 			type: String,
 			trim: true,
-			validate: validator_name,			
+			validate: validatorName,			
 			required: true
 	},
 	
 	email: {
 			type: String,
-			validate: validator_email,
+			validate: validatorEmail,
 			required: true,
 			index: { unique: true }
 	},
@@ -61,8 +61,8 @@ const userSchema = new Schema({
 	password: {
 			type: String,
 			required: true,
-			validate: validator_password,	
-			set: v => {if (v.length < 10 || !v || v == '') {
+			validate: validatorPassword,	
+			set: v => {if (v.length < 10 || !v || v === '') {
 						return v;
 						}
 						else {
@@ -76,7 +76,7 @@ const userSchema = new Schema({
 			lowercase: true,
 			trim: true,
 			default: 'customer',
-			validate: validator_role
+			validate: validatorRole
 	}
 
 });
