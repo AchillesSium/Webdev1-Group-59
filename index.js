@@ -1,3 +1,10 @@
+const path = require('path');
+const envPath = path.resolve(__dirname, './.env');
+require('dotenv').config({ path: envPath });
+const { connectDB, disconnectDB } = require('./models/db');
+const User = require('./models/user');
+connectDB();
+
 const http = require('http');
 const { handleRequest } = require('./routes');
 

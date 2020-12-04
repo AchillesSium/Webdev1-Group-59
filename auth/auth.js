@@ -1,35 +1,28 @@
-const { getCredentials } = require("../utils/requestUtils");
-const { getUser } = require("../utils/users");
+const requestUtils = require("../utils/requestUtils");
+const User = require("../models/user");
 
 /**
  * Get current user based on the request headers
  *
- * @param {http.IncomingMessage} request
- * @returns {Object|null} current authenticated user or null if not yet authenticated
+ * @param {http.IncomingMessage} request incomming http request
+ * @returns {object|null} current authenticated user or null if not yet authenticated
  */
 const getCurrentUser = async request => {
-  // TODO: 8.4 Implement getting current user based on the "Authorization" request header
+  // getting current user based on the "Authorization" request header
 
   // NOTE: You can use getCredentials(request) function from utils/requestUtils.js
   // and getUser(email, password) function from utils/users.js to get the currently
   // logged in user
-  const current = await getCredentials(request);
-  if(current === undefined){
-    return null;
-  }else if(current === null){
-    return null;
-  }else if (current.length <= 1){
-    return null;
+  var current = await requestUtils.getCredentials(request);
+  if(!current) return null;
+  
+  //Find current user from database and return that user if credentials are not null
+  const user = await User.findOne({ email: current[0]}).exec();
+  if(user != null){
+    if(await user.checkPassword(current[1])) return user;
+    else return null;
   }
-  const email = current[0];
-  const password = current[1];
-  const user = getUser(email, password);
-  if(user !== undefined){
-    return user;
-  }
-  else{
-    return null;
-  }
+  else return null;
 };
 
 module.exports = { getCurrentUser };

@@ -2,7 +2,7 @@
  * Decode, parse and return user credentials (username and password)
  * from the Authorization header.
  *
- * @param {http.incomingMessage} request
+ * @param {http.incomingMessage} request incomming request from user
  * @returns {Array|null} [username, password] or null if header is missing
  */
 const getCredentials = request => {
@@ -12,10 +12,10 @@ const getCredentials = request => {
   //  See: https://attacomsian.com/blog/nodejs-base64-encode-decode
   //       https://stackabuse.com/encoding-and-decoding-base64-strings-in-node-js/
 
-  if(request.headers.authorization === null){
+  if(request.headers.authorization == null){
     return null;
   }
-  if(request.headers.authorization === undefined){
+  if(request.headers.authorization == undefined){
     return undefined;
   }
   const header = request.headers.authorization;
@@ -33,8 +33,8 @@ const getCredentials = request => {
 /**
  * Does the client accept JSON responses?
  *
- * @param {http.incomingMessage} request
- * @returns {boolean}
+ * @param {http.incomingMessage} request incomming request from user
+ * @returns {boolean} return boolean value
  */
 const acceptsJson = request => {
   // TODO: 8.3 Check if the client accepts JSON as a response based on "Accept" request header
@@ -54,8 +54,8 @@ const acceptsJson = request => {
 /**
  * Is the client request content type JSON?
  *
- * @param {http.incomingMessage} request
- * @returns {boolean}
+ * @param {http.incomingMessage} request incomming request from user
+ * @returns {boolean} return boolean value
  */
 const isJson = request => {
   // TODO: 8.3 Check whether request "Content-Type" is JSON or not
@@ -83,7 +83,7 @@ const isJson = request => {
  *     // Do something with the json
  *   })
  *
- * @param {http.IncomingMessage} request
+ * @param {http.IncomingMessage} request incomming request from user
  * @returns {Promise<*>} Promise resolves to JSON content of the body
  */
 const parseBodyJson = request => {

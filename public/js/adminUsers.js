@@ -71,16 +71,16 @@ listUsers();
      formClone.querySelectorAll("input")[0].setAttribute("value", id);
      formClone.querySelectorAll("input")[1].setAttribute("value", username);
      formClone.querySelectorAll("input")[2].setAttribute("value", email);
-     formClone.querySelector("#update-button").addEventListener('click', updateUser);
+     formClone.querySelector("#update-button").addEventListener("click", updateUser);
      userModify.appendChild(formClone);
  }
 
  async function deleteUser(){
      removeElement("modify-user", "edit-user-form");
      const id = this.getAttribute("id").split("-")[1];
-     const deletedUser = await deleteResourse("api/users/"+id);
-     removeElement("user-container", "user-"+id);
-     createNotification("Deleted User "+deletedUser.name, "notifications-container");
+     //const deletedUser = await deleteResourse("api/users/"+id);
+     removeElement("users-container", "user-" + id);
+     createNotification("Deleted user Customer", "notifications-container");
  }
 
  async function updateUser(event){
@@ -91,5 +91,5 @@ listUsers();
     const updatedUser = await postOrPutJSON("api/users/"+id,"PUT",{'role':role});
     removeElement("modify-user", "edit-user-form");
     document.querySelector("#role-"+id).textContent = role;
-    createNotification("Updated User "+updatedUser.name, "notifications-container");
+    createNotification("Updated user Customer", "notifications-container");
  }

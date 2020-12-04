@@ -35,35 +35,46 @@ const demoUsers = data.users;
 
 /**
  * Generate a random string for use as user ID
- * @returns {string}
+ * @returns {string} return a string
  */
 const generateId = () => {
-  let id;
+  var id;
 
-  do {
+  // do {
     // Generate unique random id that is not already in use
     // Shamelessly borrowed from a Gist. See:
     // https://gist.github.com/gordonbrander/2230317
 
     id = Math.random().toString(36).substr(2, 9);
-  } while (data.users.some(u => u._id === id));
+    id = getRandomId(id);
+    
+  //} while (data.users.some(u => u._id === id));
 
   return id;
 };
 
+
+function getRandomId(id){
+  const idinuse = data.users.filter(user => user._id === id);
+  if(idinuse.length > 0){
+    const id = Math.random().toString(36).substr(2, 9);
+    getRandomId(id);
+  }else{
+    return id;
+  }
+}
+
 /**
  * Check if email is already in use by another user
  *
- * @param {string} email
- * @returns {boolean}
+ * @param {string} email email of requested user
+ * @returns {boolean} return boolean value
  */
 const emailInUse = email => {
   // TODO: 8.3 Check if there already exists a user with a given email
-  for(let i = 0; i < demoUsers.length; i++){
-    const user = demoUsers[i];
-    if(email === user.email){
-      return true;
-    }
+  const inuse = demoUsers.filter(user => user.email == email);
+  if (inuse.length > 0) {
+    return true;
   }
   return false;
 };
@@ -74,18 +85,22 @@ const emailInUse = email => {
  * Returns a copy of the found user and not the original
  * to prevent modifying the user outside of this module.
  *
- * @param {string} email
- * @param {string} password
- * @returns {Object|undefined}
+ * @param {string} email email of requesting user
+ * @param {string} password password of requesting user
+ * @returns {object|undefined} returns an object
  */
 const getUser = (email, password) => {
   // TODO: 8.3 Get user whose email and password match the provided values
-  for(let i = 0; i < demoUsers.length; i++){
-    const user = demoUsers[i];
-    if(email === user.email && password === user.password){
-      const copyUser = JSON.parse(JSON.stringify(user));
-      return copyUser;
-    }
+  // for(let i = 0; i < demoUsers.length; i++){
+  //   const user = demoUsers[i];
+  //   if(email === user.email && password === user.password){
+  //     const copyUser = JSON.parse(JSON.stringify(user));
+  //     return copyUser;
+  //   }
+  // }
+  const copy_user = demoUsers.filter(user => user.email === email && user.password === password);
+  if(copy_user.length > 1){
+    return copy_user;
   }
   return undefined;
 };
@@ -96,17 +111,21 @@ const getUser = (email, password) => {
  * Returns a copy of the user and not the original
  * to prevent modifying the user outside of this module.
  *
- * @param {string} userId
- * @returns {Object|undefined}
+ * @param {string} userId requested ID
+ * @returns {object|undefined} returns an object
  */
 const getUserById = userId => {
   // TODO: 8.3 Find user by user id
-  for(let i = 0; i < demoUsers.length; i++){
-    const user = demoUsers[i];
-    if(user._id === userId){
-      const copyUser = JSON.parse(JSON.stringify(user));
-      return copyUser;
-    }
+  // for(let i = 0; i < demoUsers.length; i++){
+  //   const user = demoUsers[i];
+  //   if(user._id === userId){
+  //     const copyUser = JSON.parse(JSON.stringify(user));
+  //     return copyUser;
+  //   }
+  // }
+  const user = demoUsers.filter(user => user._id === userId);
+  if(user.length > 0){
+    return user;
   }
   return undefined;
 };
@@ -114,19 +133,20 @@ const getUserById = userId => {
 /**
  * Delete user by its ID and return the deleted user
  *
- * @param {string} userId
- * @returns {Object|undefined} deleted user or undefined if user does not exist
+ * @param {string} userId ID of requested user
+ * @returns {object|undefined} deleted user or undefined if user does not exist
  */
 const deleteUserById = userId => {
   // TODO: 8.3 Delete user with a given id
-  for(let i = 0; i < demoUsers.length; i++){
-    const user = demoUsers[i];
-    if(user._id === userId){
-      demoUsers.splice(i, 1);
-      return user;
-    }
+  var user_Index = undefined;
+  var user_Index = data.users.findIndex((obj => obj._id == userId));
+  if (user_Index != undefined && user_Index != -1){
+    var new_User = data.users[user_Index];
+    data.users.splice(user_Index , 1);
+    return new_User;
+  }else{
+    return undefined;
   }
-  return undefined;
 };
 
 /**
@@ -135,13 +155,14 @@ const deleteUserById = userId => {
  * Returns copies of the users and not the originals
  * to prevent modifying them outside of this module.
  *
- * @returns {Array<Object>} all users
+ * @returns {Array<object>} all users
  */
 const getAllUsers = () => {
   // TODO: 8.3 Retrieve all users
-  const copyAll = JSON.parse(JSON.stringify(demoUsers));
-  return copyAll;
+  var usersCopy = JSON.parse(JSON.stringify(data.users));
+  return usersCopy;
 };
+
 
 /**
  * Save new user
@@ -152,18 +173,28 @@ const getAllUsers = () => {
  *
  * DO NOT MODIFY OR OVERWRITE users.json
  *
- * @param {Object} user
- * @returns {Object} copy of the created user
+ * @param {object} user requested user to save
+ * @returns {object} copy of the created user
  */
 const saveNewUser = user => {
   // TODO: 8.3 Save new user
   // Use generateId() to assign a unique id to the newly created user.
-  const id  = generateId();
-  user._id = id;
+  const id  = generateId()
+  console.log(id);
+  user._id  = id;
   user.role = 'customer';
-  const copyUser = JSON.parse(JSON.stringify(user));
+  console.log(user._id, user.role);
+  var copyUser = JSON.parse(JSON.stringify(user));
   demoUsers.push(copyUser);
   return copyUser;
+
+  // let id  = generateId()
+  // user._id = id;
+  // user.role = 'customer';
+  // var copyUser = JSON.parse(JSON.stringify(user));
+  // userDta.push(copyUser);
+  // //console.log(userDta);
+  // return copyUser;
 };
 
 /**
@@ -174,22 +205,29 @@ const saveNewUser = user => {
  * Returns a copy of the user and not the original
  * to prevent modifying the user outside of this module.
  *
- * @param {string} userId
+ * @param {string} userId requesting user ID
  * @param {string} role "customer" or "admin"
- * @returns {Object|undefined} copy of the updated user or undefined if user does not exist
+ * @returns {object|undefined} copy of the updated user or undefined if user does not exist
  * @throws {Error} error object with message "Unknown role"
  */
 const updateUserRole = (userId, role) => {
   // TODO: 8.3 Update user's role
   if(data.roles.includes(role)){
-    for(let i = 0; i < demoUsers.length; i++){
-      //var user = demoUsers[i];
-      if(demoUsers[i]._id === userId){
-        demoUsers[i].role = role;
-        const copyUser = JSON.parse(JSON.stringify(demoUsers[i]));
-        return copyUser;
+    // for(let i = 0; i < demoUsers.length; i++){
+    //   //var user = demoUsers[i];
+    //   if(demoUsers[i]._id === userId){
+    //     demoUsers[i].role = role;
+    //     const copyUser = JSON.parse(JSON.stringify(demoUsers[i]));
+    //     return copyUser;
+    //   }
+    // }
+    demoUsers.forEach(function(user, i){
+      if (user._id === userId){
+        user.role = role;
+        demoUsers[i] = user
       }
-    }
+    });
+
   }
   else throw new Error('Unknown role');
 
@@ -202,7 +240,7 @@ const updateUserRole = (userId, role) => {
  * This function can be used to validate that user has all required
  * fields before saving it.
  *
- * @param {Object} user user object to be validated
+ * @param {object} user user object to be validated
  * @returns {Array<string>} Array of error messages or empty array if user is valid
  */
 const validateUser = user => {

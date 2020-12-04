@@ -7,18 +7,28 @@ const { resetUsers } = require('../../utils/users');
 const registrationUrl = '/api/register';
 const usersUrl = '/api/users';
 const contentType = 'application/json';
+
+// helper function for authorization headers
+const encodeCredentials = (username, password) =>
+  Buffer.from(`${username}:${password}`, 'utf-8').toString('base64');
+
 chai.use(chaiHttp);
 
 // helper function for creating randomized test data
 const generateRandomString = (len = 9) => {
-  return Math.random()
-    .toString(36)
-    .substr(2, len);
+  let str = '';
+
+  do {
+    str += Math.random().toString(36).substr(2, 9).trim();
+  } while (str.length < len);
+
+  return str.substr(0, len);
 };
 
 // Get users (create copies for test isolation)
 const users = require('../../users.json').map(user => ({ ...user }));
 const adminUser = { ...users.find(u => u.role === 'admin') };
+const adminCredentials = encodeCredentials(adminUser.email, adminUser.password);
 
 const unknownUrls = [`/${generateRandomString(20)}.html`, `/api/${generateRandomString(20)}`];
 
@@ -74,10 +84,7 @@ describe('Routes', () => {
     describe('Registration: POST /api/register', () => {
       it('should respond with "406 Not Acceptable" when Accept header is missing', async () => {
         const user = getTestUser();
-        const response = await chai
-          .request(handleRequest)
-          .post(registrationUrl)
-          .send(user);
+        const response = await chai.request(handleRequest).post(registrationUrl).send(user);
         expect(response).to.have.status(406);
       });
 
@@ -204,10 +211,7 @@ describe('Routes', () => {
       });
 
       it('should respond with "406 Not Acceptable" when client does not accept JSON', async () => {
-        const response = await chai
-          .request(handleRequest)
-          .get(usersUrl)
-          .set('Accept', 'text/html');
+        const response = await chai.request(handleRequest).get(usersUrl).set('Accept', 'text/html');
 
         expect(response).to.have.status(406);
       });
@@ -216,7 +220,8 @@ describe('Routes', () => {
         const response = await chai
           .request(handleRequest)
           .get(usersUrl)
-          .set('Accept', contentType);
+          .set('Accept', contentType)
+          .set('Authorization', `Basic ${adminCredentials}`);
 
         expect(response).to.have.status(200);
         expect(response).to.be.json;
