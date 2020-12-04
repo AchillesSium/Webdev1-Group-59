@@ -138,12 +138,12 @@ const getUserById = userId => {
  */
 const deleteUserById = userId => {
   // TODO: 8.3 Delete user with a given id
-  var user_Index = undefined;
-  var user_Index = data.users.findIndex((obj => obj._id == userId));
-  if (user_Index != undefined && user_Index != -1){
-    var new_User = data.users[user_Index];
-    data.users.splice(user_Index , 1);
-    return new_User;
+  const userIndex = undefined;
+  const userIndex = data.users.findIndex((obj => obj._id == userId));
+  if (userIndex != undefined && userIndex != -1){
+    const newUser = data.users[userIndex];
+    data.users.splice(userIndex , 1);
+    return newUser;
   }else{
     return undefined;
   }
@@ -159,7 +159,7 @@ const deleteUserById = userId => {
  */
 const getAllUsers = () => {
   // TODO: 8.3 Retrieve all users
-  var usersCopy = JSON.parse(JSON.stringify(data.users));
+  const usersCopy = JSON.parse(JSON.stringify(data.users));
   return usersCopy;
 };
 
@@ -184,7 +184,7 @@ const saveNewUser = user => {
   user._id  = id;
   user.role = 'customer';
   console.log(user._id, user.role);
-  var copyUser = JSON.parse(JSON.stringify(user));
+  const copyUser = JSON.parse(JSON.stringify(user));
   demoUsers.push(copyUser);
   return copyUser;
 

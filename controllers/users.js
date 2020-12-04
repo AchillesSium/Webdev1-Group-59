@@ -22,13 +22,13 @@ const getAllUsers = async response => {
  */
 const deleteUser = async (response, userId, currentUser) => {
   
-  const delete_user = await User.findById(userId).exec();
-  if(!delete_user) return notFound(response);
+  const deletedUser = await User.findById(userId).exec();
+  if(!deletedUser) return notFound(response);
   else if(userId === currentUser.id){
     return badRequest(response, "Bad Request");
   }
   await User.deleteOne({_id : userId});
-  return sendJson(response, delete_user);
+  return sendJson(response, deletedUser);
 };
 
 /**
@@ -54,7 +54,7 @@ const updateUser = async (response, userId, currentUser, userData) => {
   //     return badRequest(response, "Bad Request");
   //   }
   // }
-  if (userId == currentUser.id) {
+  if (userId === currentUser.id) {
 		return responseUtils.badRequest(response, "Updating own data is not allowed");
 	}
 	else if (!userData.role || (userData.role !== 'customer' && userData.role !== 'admin')) {
@@ -63,8 +63,8 @@ const updateUser = async (response, userId, currentUser, userData) => {
 	else if(currentUser.role !== 'admin'){
 		return responseUtils.forbidden(response); 
 	}
-	else if(currentUser.role == 'admin'){
-		let user = await User.findById(userId).exec();
+	else if(currentUser.role === 'admin'){
+		const user = await User.findById(userId).exec();
 		if (!user) {
 			return responseUtils.notFound(response);
 		}
@@ -91,7 +91,7 @@ const viewUser = async (response, userId, currentUser) => {
   if(currentUser.role !== 'admin'){
 		return forbidden(response); 
     }
-	else if(currentUser.role == 'admin'){
+	else if(currentUser.role === 'admin'){
 		const user = await User.findById(userId).exec();
 		if (!user) {
 			return responseUtils.notFound(response);
@@ -111,10 +111,10 @@ const viewUser = async (response, userId, currentUser) => {
 const registerUser = async (response, userData) => {
   
   try{
-    const new_user = new User(userData);
-    new_user.role = 'customer';
-    await new_user.save();
-    return createdResource(response, new_user);
+    const newUser = new User(userData);
+    newUser.role = 'customer';
+    await newUser.save();
+    return createdResource(response, newUser);
   }catch(err){
     return badRequest(response, "Bad Request");
   }
