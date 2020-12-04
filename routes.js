@@ -85,103 +85,63 @@ const handleRequest = async (request, response) => {
   const { url, method, headers } = request;
   const filePath = new URL(url, `http://${headers.host}`).pathname;
 
-  // serve static files from public/ and return immediately
   if (method.toUpperCase() === 'GET' && !filePath.startsWith('/api')) {
     const fileName = filePath === '/' || filePath === '' ? 'index.html' : filePath;
     return renderPublic(fileName, response);
   }
-
   const currentUser = await getCurrentUser(request);
+  const requestBody = await parseBodyJson(request);
 
+  return breakingComplexity(request, response, currentUser, requestBody);
+};
+
+function breakingComplexity(request, response, currentUser, requestBody){
   if (matchUserId(filePath)) {
-    
-    //Check user authentication 
     if (!checkAuth(response, currentUser, 'admin')) return;
-
-    //Get user ID from coming url
     const userId = url.split('/').pop();
-
-    //return user if it exists
     if (method.toUpperCase() === 'GET') {
       return viewUser(response, userId, currentUser);
-    }
-    //update user
-    else if (method.toUpperCase() === 'PUT') {
-      const requestBody = await parseBodyJson(request);
-      return await updateUser(response, userId, currentUser, requestBody);
-    }
-    //delete a user
-    else if (method.toUpperCase() === 'DELETE') {
-      return deleteUser(response, userId, currentUser);
-    }
-  }
-/*
-  if (matchProductId(filePath)) {
-
-    //check user authentication
-    if (!checkAuth(response, currentUser)) return;
-
-    //Get product ID from coming url
-    const product_id = url.split('/').pop();
-
-    //Return product if ID exists
-    if (method.toUpperCase() === 'GET') {
-      return viewUser(response, userId, currentUser);
-    }
-    //Update a product
-    else if (method.toUpperCase() === 'PUT') {
-      const requestBody = await parseBodyJson(request);
+    }else if (method.toUpperCase() === 'PUT') {
       return updateUser(response, userId, currentUser, requestBody);
-    }
-    //delete a product
-    else if (method.toUpperCase() === 'DELETE') {
+    }else if (method.toUpperCase() === 'DELETE') {
       return deleteUser(response, userId, currentUser);
     }
   }
-*/
-  // Default to 404 Not Found if unknown url
+
   if (!(filePath in allowedMethods)) return responseUtils.notFound(response);
-
-  // See: http://restcookbook.com/HTTP%20Methods/options/
   if (method.toUpperCase() === 'OPTIONS') return sendOptions(filePath, response);
-
-  // Check for allowable methods
   if (!allowedMethods[filePath].includes(method.toUpperCase())) {
     return responseUtils.methodNotAllowed(response);
   }
+  
+  return breakingComplexity2(request, response, currentUser, requestBody);
+}
 
-  // Require a correct accept header (require 'application/json' or '*/*')
+function breakingComplexity2(request, response, currentUser, requestBody){
   if (!acceptsJson(request)) {
     return responseUtils.contentTypeNotAcceptable(response);
   }
-
-  // GET all users
   if (filePath === '/api/users' && method.toUpperCase() === 'GET') {
-    //get the current user and check it
     if(checkAuth(response, currentUser, 'admin')) return getAllUsers(response);
   }
+  return breakingComplexity3(request, response, currentUser, requestBody);
+}
 
-  // register new user
+function breakingComplexity3(request, response, currentUser, requestBody){
   if (filePath === '/api/register' && method.toUpperCase() === 'POST') {
-    // Fail if request is not in JSON
     if (!isJson(request)) {
       return responseUtils.badRequest(response, 'Invalid Content-Type. Expected application/json');
     }
-
-    // You can use parseBodyJson(request) from utils/requestUtils.js to parse request body
-    const userBody = await parseBodyJson(request);
-    //try to save the new user request
+    
     if(userBody !== null){
-      return registerUser(response, userBody);
+      return registerUser(response, requestBody);
     }else{
       return responseUtils.badRequest(response, "Bad Request");
     }
   }
-
-  // Returning all products
   if (filePath === '/api/products' && method.toUpperCase() === 'GET') {
     if(checkAuth(response, currentUser)) return getAllProducts(response);
   }
-};
+}
 
 module.exports = { handleRequest };
