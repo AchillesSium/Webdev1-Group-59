@@ -139,7 +139,7 @@ const getUserById = userId => {
  */
 const deleteUserById = userId => {
   // TODO: 8.3 Delete user with a given id
-  const userIndex = undefined;
+  //const userIndex = undefined;
   const userIndex = data.users.findIndex((obj => obj._id == userId));
   if (userIndex != undefined && userIndex != -1){
     const newUser = data.users[userIndex];
