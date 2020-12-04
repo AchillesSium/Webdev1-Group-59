@@ -38,7 +38,7 @@ const demoUsers = data.users;
  * @returns {string} return a string
  */
 const generateId = () => {
-  var id;
+  const id;
 
   // do {
     // Generate unique random id that is not already in use
@@ -72,7 +72,7 @@ function getRandomId(id){
  */
 const emailInUse = email => {
   // TODO: 8.3 Check if there already exists a user with a given email
-  const inuse = demoUsers.filter(user => user.email == email);
+  const inuse = demoUsers.filter(user => user.email === email);
   if (inuse.length > 0) {
     return true;
   }
@@ -98,9 +98,9 @@ const getUser = (email, password) => {
   //     return copyUser;
   //   }
   // }
-  const copy_user = demoUsers.filter(user => user.email === email && user.password === password);
-  if(copy_user.length > 1){
-    return copy_user;
+  const copyUser = demoUsers.filter(user => user.email === email && user.password === password);
+  if(copyUser.length > 1){
+    return copyUser;
   }
   return undefined;
 };
@@ -139,8 +139,8 @@ const getUserById = userId => {
 const deleteUserById = userId => {
   // TODO: 8.3 Delete user with a given id
   //const userIndex = undefined;
-  const userIndex = data.users.findIndex((obj => obj._id == userId));
-  if (userIndex != undefined && userIndex != -1){
+  const userIndex = data.users.findIndex((obj => obj._id === userId));
+  if (userIndex !== undefined && userIndex !== -1){
     const newUser = data.users[userIndex];
     data.users.splice(userIndex , 1);
     return newUser;
@@ -179,7 +179,7 @@ const getAllUsers = () => {
 const saveNewUser = user => {
   // TODO: 8.3 Save new user
   // Use generateId() to assign a unique id to the newly created user.
-  const id  = generateId()
+  const id  = generateId();
   console.log(id);
   user._id  = id;
   user.role = 'customer';
@@ -224,7 +224,7 @@ const updateUserRole = (userId, role) => {
     demoUsers.forEach(function(user, i){
       if (user._id === userId){
         user.role = role;
-        demoUsers[i] = user
+        demoUsers[i] = user;
       }
     });
 
