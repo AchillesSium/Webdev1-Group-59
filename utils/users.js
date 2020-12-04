@@ -5,7 +5,6 @@
  * to store all data.
  */
 
-const { use } = require('chai');
 
 /**
  * Use this object to store users

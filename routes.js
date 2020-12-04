@@ -4,7 +4,6 @@ const { renderPublic } = require('./utils/render');
 const { emailInUse, getAllUsers, saveNewUser, validateUser, updateUserRole, getUserById, deleteUserById } = require('./utils/users');
 const { sendJson, badRequest, createdResource, basicAuthChallenge, notFound, forbidden } = require('./utils/responseUtils');
 const { getCurrentUser } = require('./auth/auth');
-const { use } = require('chai');
 
 /**
  * Known API routes and their allowed methods
