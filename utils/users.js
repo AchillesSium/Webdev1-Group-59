@@ -38,7 +38,7 @@ const demoUsers = data.users;
  * @returns {string} return a string
  */
 const generateId = () => {
-  const id;
+  const id
 
   // do {
     // Generate unique random id that is not already in use
