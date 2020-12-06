@@ -57,7 +57,7 @@ function clearCart(){
     // for(item in sessionStorage){
     //     sessionStorage.removeItem(item);
     // }
-    sessionStorage = [];
+    sessionStorage.clear();
     clearProductList();
 }
 

@@ -1,9 +1,7 @@
-const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const productSchema = new Schema({
-    // TODO: 9.4 Implement this
     
     name: {
             type: String,
@@ -18,7 +16,7 @@ const productSchema = new Schema({
             type: Number,
             required: true
         }, 
-    _id: {
+    image: {
             type: String,
             trim: true
         }
