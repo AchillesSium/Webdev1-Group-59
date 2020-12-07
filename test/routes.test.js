@@ -53,6 +53,31 @@ describe('Routes', () => {
     };
   };
 
+  const getTestProduct = () => {
+    return {
+      name: generateRandomString(),
+      price: Math.floor(Math.random() * 50000) / 100,
+      image: `http://www.images.com/${generateRandomString()}.jpg`,
+      description: generateRandomString(75)
+    };
+  };
+
+  const getTestOrder = () => {
+    return {
+      items: [
+        {
+          product: {
+            _id: allProducts[1].id,
+            name: allProducts[1].name,
+            price: allProducts[1].price,
+            description: allProducts[1].description
+          },
+          quantity: Math.floor(Math.random() * 5) + 1
+        }
+      ]
+    };
+  };
+
   beforeEach(async () => {
     await User.deleteMany({});
     await User.create(users);
