@@ -5,7 +5,6 @@
  * to store all data.
  */
 
-const { use } = require('chai');
 
 /**
  * Use this object to store users
@@ -39,15 +38,15 @@ const demoUsers = data.users;
  * @returns {string} return a string
  */
 const generateId = () => {
-  let id;
 
-  do {
+  //do {
     // Generate unique random id that is not already in use
     // Shamelessly borrowed from a Gist. See:
     // https://gist.github.com/gordonbrander/2230317
 
-    id = Math.random().toString(36).substr(2, 9);
-  } while (data.users.some(u => u._id === id));
+    let id = Math.random().toString(36).substr(2, 9);
+    id = getRandomId(id);
+  //} while (data.users.some(u => u._id === id));
 
   return id;
 };
@@ -56,8 +55,8 @@ const generateId = () => {
 function getRandomId(id){
   const idinuse = data.users.filter(user => user._id === id);
   if(idinuse.length > 0){
-    const id = Math.random().toString(36).substr(2, 9);
-    getRandomId(id);
+    const newid = Math.random().toString(36).substr(2, 9);
+    getRandomId(newid);
   }else{
     return id;
   }
@@ -122,9 +121,9 @@ const getUserById = userId => {
   //     return copyUser;
   //   }
   // }
-  const user = demoUsers.filter(user => user._id === userId);
-  if(user.length > 0){
-    return user;
+  const userr = demoUsers.filter(user => user._id === userId);
+  if(userr.length > 0){
+    return userr;
   }
   return undefined;
 };
@@ -141,7 +140,7 @@ const deleteUserById = userId => {
   const userIndex = data.users.findIndex((obj => obj._id === userId));
   if (userIndex !== undefined && userIndex !== -1){
     const newUser = data.users[userIndex];
-    data.users.splice(userIndex , 1);
+    data.users.splice(userIndex, 1);
     return newUser;
   }else{
     return undefined;
@@ -178,9 +177,9 @@ const getAllUsers = () => {
 const saveNewUser = user => {
   // TODO: 8.3 Save new user
   // Use generateId() to assign a unique id to the newly created user.
-  const id  = generateId();
+  const id = generateId();
   console.log(id);
-  user._id  = id;
+  user._id = id;
   user.role = 'customer';
   console.log(user._id, user.role);
   const copyUser = JSON.parse(JSON.stringify(user));

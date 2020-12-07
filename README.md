@@ -1,9 +1,9 @@
 # Group 
 
-Member1:  name, email, student ID, 
+Member1:  Mohammad Aqib Hassan, mohammad.hassan@tuni.fi, 050457535, 
 resposible for: TODO, short description of duties 
 
-Member2:  name, email, student ID, 
+Member2:  Talha Manj, talha.manj@tuni.fi, 050365148
 resposible for: TODO, short description of duties 
 
 
@@ -17,27 +17,39 @@ A web shop with vanilla HTML, CSS.
 
 ```
 .
-├── index.js                --> TODO
-├── package.json            --> TODO
-├── routes.js               --> TODO
-├── auth                    --> TODO
-│   └──  auth.js            --> TODO
-├── controllers             --> TODO
-│   ├──  ...                -->   ...
-│   └── users.js            --> controller for user
-├── models                  --> 
-│                               TODO
-├── public                  --> 
-│   ├── img                 --> 
-│   ├── js                  --> 
-│   └── css                 --> 
-├── utils                   --> TODO
-│   ├──                     --> TODO
-│   └──                     --> TODO
-└── test                    --> tests
-│   ├── auth                --> TODO
-│   ├── controllers         --> TODO
-└── └── own                 --> TODO
+├── index.js                
+├── package.json            
+├── routes.js               
+├── auth                    
+│   └──  auth.js            
+├── controllers             
+│   ├── products.js              
+│   └── users.js            
+├── models
+│   ├── db.js 
+│   ├── oder.js  
+│   ├── product.js  
+│   └── user.js                  
+│                               
+├── public                 
+│   ├── js                  
+│   └── css   
+├── setup                  
+│   ├── create-orders.js       
+│   ├── products.json           
+│   ├── reset-db.js                  
+│   └── users.json                
+├── utils                   
+│   ├── products.js                    
+│   ├── render.js                    
+|   ├── requestUtils.js                    
+│   ├── responsetUtils.js
+│   └── users.js
+└── test                    
+│   ├── auth                
+│   ├── controllers 
+│   ├── own        
+└── └── utils                 
 
 
 ```
