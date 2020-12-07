@@ -6,7 +6,7 @@ const { connectDB, disconnectDB } = require('../models/db');
 const User = require('../models/user');
 
 const users = require('./users.json').map(user => ({ ...user }));
-const products = require('../products.json').map(product => ({ ...product }));
+const products = require('./products.json').map(product => ({ ...product }));
 
 (async () => {
   connectDB();

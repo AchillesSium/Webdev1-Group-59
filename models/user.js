@@ -45,17 +45,11 @@ const userSchema = new Schema({
   // TODO: 9.4 Implement this
   
 	name: {
-			type: String,
-			trim: true,
-			validate: validatorName,			
-			required: true
+			type: String, trim: true, validate: validatorName, required: true
 	},
 	
 	email: {
-			type: String,
-			validate: validatorEmail,
-			required: true,
-			index: { unique: true }
+			type: String, validate: validatorEmail, required: true, index: { unique: true }
 	},
 	
 	password: {
@@ -72,11 +66,7 @@ const userSchema = new Schema({
 	},
 	
 	role: {
-			type: String,
-			lowercase: true,
-			trim: true,
-			default: 'customer',
-			validate: validatorRole
+			type: String, lowercase: true, trim: true, default: 'customer', validate: validatorRole
 	}
 
 });

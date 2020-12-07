@@ -8,7 +8,8 @@
  *       - Use postOrPutJSON() function from utils.js to send your data back to server
  */
 const form = document.getElementById('register-form');
-form.onsubmit = function(){
+form.onsubmit = function(event){
+    event.preventDefault();
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     const pass = document.getElementById('password').value;
