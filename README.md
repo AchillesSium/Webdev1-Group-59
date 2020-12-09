@@ -112,10 +112,6 @@ Model: User
   Description: All kind of user action model.
   Connections: Independent model.
 
-## Tests and documentation
-
-TODO: Links to at least 10 of your group's GitLab issues, and their associated Mocha tests and test files.
-
 ## Security concerns
 
 Issues                      Comment
