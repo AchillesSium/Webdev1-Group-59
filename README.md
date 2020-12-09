@@ -69,16 +69,47 @@ A web shop with vanilla HTML, CSS.
 │   ├── setup.test.js       --> Setup tests
 └── └── ui.test.js          --> UI tests
 
-
-```
-
-TODO: describe added files here and give them short descriptions
-
 ## The architecture 
 
 TODO: describe the system, important buzzwords include MVC and REST.
 UML diagrams would be highly appreciated.
 
+## Data Models
+
+Model: Order
+  Attributes:
+    _id: String
+    cutomerId: String
+    items: Array[
+      product:
+        _id: String
+        name: String
+        price: Number
+        description: String
+      quantity: Number
+    ]
+  Description: Model to store orders from customers.
+  Connections: Connected with product attributes.
+
+Model: Product
+  Attributes:
+    _id: String
+    name: String
+    price: Number
+    image: String
+    description: String
+  Description: Model to store products.
+  Connections: Connected to order model.
+
+Model: User
+  Attributes:
+    _id: String
+    name: String
+    role: String(customer or admin)
+    email: String
+    password: String(encrypted vith bcrypt)
+  Description: All kind of user action model.
+  Connections: Independent model.
 
 ## Tests and documentation
 
