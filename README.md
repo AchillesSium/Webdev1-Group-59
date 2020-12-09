@@ -118,7 +118,10 @@ TODO: Links to at least 10 of your group's GitLab issues, and their associated M
 
 ## Security concerns
 
-TODO: list the security threats represented in the course slides.
-Document how your application protects against the threats.
-You are also free to add more security threats + protection here, if you will.
+Issues                      Comment
 
+Injection                   Secured from any kind of threat user input, SQL, NoSQL Injection
+Broken Authentication       Secured from any kind of broken session or user authentication
+Sensitive data exposure     Secured in terms of data exposure without authentication
+Security misconfiguration   Security configuration are well cehcked
+Cross site scripting XSS    Secured from any kind of XSS
