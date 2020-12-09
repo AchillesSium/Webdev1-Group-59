@@ -120,7 +120,6 @@ describe('Routes', () => {
   describe('handleRequest()', () => {
     describe('General Server Functionality', () => {
       it('should respond with "404 Not Found" to an unknown URI', async () => {
-        console.log(unknownUrls);
         for (const url of unknownUrls) {
           const response = await chai.request(handleRequest).get(url);
           expect(response).to.have.status(404);

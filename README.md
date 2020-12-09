@@ -1,10 +1,16 @@
 # Group 
 
-Member1:  Mohammad Aqib Hassan, mohammad.hassan@tuni.fi, 050457535, 
-resposible for: TODO, short description of duties 
+Member1:  Mohammad Aqib Hassan, mohammad.hassan@tuni.fi, 050457535 
+Resposible for:  
+- Connect front-end and back-end
+- Implement Es-lint and funtional programming rules
+- Handle API calls
 
 Member2:  Talha Manj, talha.manj@tuni.fi, 050365148
-resposible for: TODO, short description of duties 
+Resposible for: 
+- Create entity models(order, product, user)
+- Implement Heroku 
+- Create own test
 
 
 
@@ -17,39 +23,50 @@ A web shop with vanilla HTML, CSS.
 
 ```
 .
-├── index.js                
-├── package.json            
-├── routes.js               
-├── auth                    
-│   └──  auth.js            
-├── controllers             
-│   ├── products.js              
-│   └── users.js            
-├── models
-│   ├── db.js 
-│   ├── oder.js  
-│   ├── product.js  
-│   └── user.js                  
+├── index.js                --> Receive client requests
+├── package.json            --> Build file that contains testing and debuging scripts
+├── routes.js               --> Route all requests for client
+├── auth                    --> Contains authentication related files
+│   └──  auth.js            --> Authenticate current user
+├── controllers             --> Contains all the controller files for models
+│   ├── orders.js           --> Controller to communicate with order model
+│   ├── products.js         --> Controller to communicate with product model
+│   └── users.js            --> Controller to communicate with user model
+├── models                  --> All models for database
+│   ├── db.js               --> Database model
+│   ├── oder.js             --> Order model
+│   ├── product.js          --> Product model
+│   └── user.js             --> User model     
 │                               
-├── public                 
-│   ├── js                  
-│   └── css   
-├── setup                  
-│   ├── create-orders.js       
-│   ├── products.json           
-│   ├── reset-db.js                  
-│   └── users.json                
-├── utils                   
-│   ├── products.js                    
-│   ├── render.js                    
-|   ├── requestUtils.js                    
-│   ├── responsetUtils.js
-│   └── users.js
-└── test                    
-│   ├── auth                
-│   ├── controllers 
-│   ├── own        
-└── └── utils                 
+├── public                  --> Contains all the public files for clients
+│   ├── css  
+│   │    └── styles.css     --> Contains CSS that are used in the project                
+│   └── js                  --> Necessary scripts for html files
+│       ├── addProduct.js   --> Script for addProduct.html
+│       ├── adminUsers.js   --> Script for users.html
+│       ├── cart.js         --> Script for cart.html
+│       ├── products.js     --> Script for products.html
+│       ├── register.js     --> Script for register.html
+│       └── utils.css       --> All other unitility functions
+├── setup                   --> Contains files for database           
+│   ├── create-orders.js    --> Script for creating orders
+│   ├── products.json       --> Json file for used products
+│   ├── reset-db.js         --> File that resets database
+│   └── users.json          --> Primary users
+├── utils                   --> All other unitility files       
+│   ├── products.js         --> get products data                  
+│   ├── render.js           --> Render public files  
+|   ├── requestUtils.js     --> Handles client requests               
+│   ├── responsetUtils.js   --> Handles server request
+│   └── users.js            --> Save, update or retrive user data
+└── test                    --> Contain all test files        
+│   ├── auth                --> Aunthentication tests
+│   ├── controllers         --> Controller tests
+│   ├── own                 --> Our own tests
+│   ├── utils               --> Request and response tests
+│   ├── routes.test.js      --> Routing tests
+│   ├── setup.test.js       --> Setup tests
+└── └── ui.test.js          --> UI tests
 
 
 ```
