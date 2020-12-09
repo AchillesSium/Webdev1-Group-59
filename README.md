@@ -71,8 +71,9 @@ A web shop with vanilla HTML, CSS.
 
 ## The architecture 
 
-TODO: describe the system, important buzzwords include MVC and REST.
-UML diagrams would be highly appreciated.
+This is a Node.js project. API imeplemented in REST fashion and the system follows MVC architechteure. 
+Navigation diagram can be found on directory - /public/img/Navigation.png
+Project MVC flow diagram can be found on directory - /public/img/Project_MVC _flow.png
 
 ## Data Models
 
