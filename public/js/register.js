@@ -15,10 +15,9 @@ form.onsubmit = function(){
     const passConfirm = document.getElementById('passwordConfirmation').value;
     if(pass.localeCompare(passConfirm) === 0){
         formData = {'name':name, 'email':email, 'password':pass};
-        const responseJson = postOrPutJSON('/api/register', 'POST', formData);
+        postOrPutJSON('/api/register', 'POST', formData);
         createNotification('Register Successfully!', 'notifications-container', true);
         form.reset();
-        createNotification('Register Successfully!', 'notifications-container', true);
     }else{
         createNotification('Confirm Password not matched', 'notifications-container', false);
     }
