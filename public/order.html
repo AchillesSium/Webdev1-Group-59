@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Orders</title>
+  </head>
+
+  <body>
+    <header>
+        <nav class="navbar">
+          <ul class="nav-links">
+            <li><a href="index.html">Front Page</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="users.html">List Users</a></li>
+            <li><a href="products.html">List Products</a></li>
+            <li><a href="addProduct.html">Add Product</a></li>
+            <li><a href="cart.html">Shopping Cart</a></li>
+            <li><a href="orders.html">Orders</a></li>
+          </ul>
+        </nav>
+      </header>
+    <main>
+      <h1>Orders</h1>
+      <div id="notifications-container"></div>
+      <table class="orders-table">
+          <caption hidden>Orders Data</caption>
+        <thead id="orders-table-head">
+            <tr>
+              <th id="customer">Customer</th>
+              <th id="orderId">Order ID</th>
+              <th id="action">Action</th>
+            </tr>
+        </thead>
+        <tbody id="orders-table-body"></tbody>
+      </table>
+    </main>
+    <footer>
+      <p>Copyright &copy; 2020 diipadaa etc etc.</p>
+    </footer>
+
+    <template id="order-row-template">
+        <tr>
+            <td class="customer-name"></td>
+            <td class="order-id"></td>
+            <td class="order-action">
+                <button id="btnView">View</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan=3>
+                <table hidden id="view-order">
+                    <caption hidden>Product Data</caption>
+                    <thead id="products-table-head">
+                        <tr>
+                            <th id="productId">Product ID</th>
+                            <th id="productName">Name</th>
+                            <th id="productPrice">Price</th>
+                            <th id="productQuantity">Quantity</th>
+                            <th id="productTotal">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="order-item-container">
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </template>
+
+    <template id="product-row">
+        <tr>
+            <td class="product-id"></td>
+            <td class="product-name"></td>
+            <td class="product-price"></td>
+            <td class="product-quantity"></td>
+            <td class="product-total"></td>
+        </tr>
+    </template> 
+
+    <script src="js/utils.js"></script>
+    <script src="js/orders.js"></script>
+  </body>
+</html>

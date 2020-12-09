@@ -117,3 +117,36 @@ button:hover {
 .background-red {
   background-color: red;
 }
+
+.product-image {
+  height: 250px;
+  width: 250px;
+}
+
+#products-container{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  column-gap: 5px;
+  row-gap: 5px;
+}
+
+#users-container{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  column-gap: 5px;
+  row-gap: 5px;
+}
+
+#cart-container .item-row{
+  position: relative;
+  margin-bottom: 5px;
+}
+
+.item-row{
+  border-style: solid;
+  border-width: 1px;
+  border-color: #26592B;
+  border-radius: 4px;
+  text-align: right;
+  padding: 10px;
+}

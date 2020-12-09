@@ -129,8 +129,8 @@ const handleRequest = async (request, response) => {
     }
     //update user
     else if (method.toUpperCase() === 'PUT') {
-      const requestBody = await parseBodyJson(request);
-      return await updateUser(response, userId, currentUser, requestBody);
+      const requestBody = parseBodyJson(request);
+      return updateUser(response, userId, currentUser, requestBody);
     }
     //delete a user
     else if (method.toUpperCase() === 'DELETE') {
@@ -152,7 +152,7 @@ const handleRequest = async (request, response) => {
     }
     //Update a product
     else if (method.toUpperCase() === 'PUT') {
-      const requestBody = await parseBodyJson(request);
+      const requestBody = parseBodyJson(request);
       return updateProduct(response, productId, requestBody);
     }
     //delete a product
@@ -227,7 +227,7 @@ const handleRequest = async (request, response) => {
         return badRequest(response, 'Invalid Content-Type. Expected application/json');
       }
       // Parse request body into JSON
-      const productBody = await parseBodyJson(request);
+      const productBody = parseBodyJson(request);
       //try to save the new product
       if(productBody !== null){
         return createProduct(response, productBody);
@@ -251,7 +251,7 @@ const handleRequest = async (request, response) => {
         return badRequest(response, 'Invalid Content-Type. Expected application/json');
       }
       // Parse request body into JSON
-      const orderBody = await parseBodyJson(request);
+      const orderBody = parseBodyJson(request);
       // try to save the new order
       if(orderBody !== null){
         return createOrder(response, orderBody);
@@ -260,7 +260,5 @@ const handleRequest = async (request, response) => {
       }
     }
 };
-
-module.exports = { handleRequest };
 
 module.exports = { handleRequest };

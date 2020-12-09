@@ -15,13 +15,13 @@ form.onsubmit = function(event){
     
     let formData;
     formData = {'name':name, 'description':description, 'price':price, 'image' :image};
-    if(formData !== ''){
-        const responseJson = postOrPutJSON('/api/products', 'POST', formData);
-        form.reset();
-        createNotification('Register Successfully!', 'notifications-container', true);
-    }else{
-        createNotification('Product data not Found', 'notifications-container', false);
-    }
+    postOrPutJSON("/api/products", "POST", formData).then(resolved => {
+        if(resolved){
+            form.reset();
+            createNotification('Register Successfully!', 'notifications-container', true);
+        }else{
+            createNotification('Only admins can add new Products...', 'notifications-container', false);
+        }
+    }, () => createNotification("Only admins can add new Products...", "notifications-container", false));
 };
-
 

@@ -8,7 +8,7 @@ function listProducts(){
         products.forEach(product => {
             var clone = productTemp.content.cloneNode(true);
             clone.querySelector('.product-image').setAttribute('id', "image-"+product._id);
-            clone.querySelector('.product-image').setAttribute('alt', "Product"+product.name);
+            clone.querySelector('.product-image').setAttribute('alt', "Product image for "+product.name);
             clone.querySelector('.product-image').setAttribute('src', product.image);
             clone.querySelector('h3').setAttribute('id', "name-"+product._id);
             clone.querySelector('.product-name').innerHTML = product.name;
