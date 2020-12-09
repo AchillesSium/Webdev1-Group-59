@@ -16,28 +16,33 @@
  *       - Use getJSON() function from utils.js to fetch user data from server
  */
 listUsers();
- function listUsers(){
-    const userPromise = getJSON('/api/users');
-    const userTemp = document.querySelector("#user-template");
-    const userContain = document.getElementById("users-container");
-    userPromise.then(users => {
-        users.forEach(user => {
-            const clone = userTemp.content.cloneNode(true);  
-            clone.querySelector('.item-row').setAttribute('id', "user-"+user._id);
-            clone.querySelector('.user-name').setAttribute('id', "name-"+user._id);
-            clone.querySelector('.user-name').innerHTML = user.name;
-            clone.querySelector('.user-email').setAttribute('id', "email-"+user._id);
-            clone.querySelector('.user-email').innerHTML = user.email;
-            clone.querySelector('.user-role').setAttribute('id', "role-"+user._id);
-            clone.querySelector('.user-role').innerHTML = user.role;
-            clone.querySelector('.modify-button').setAttribute('id',"modify-"+user._id);
-            clone.querySelector('.modify-button').addEventListener("click", modifyUser);
-            clone.querySelector('.delete-button').setAttribute('id',"delete-"+user._id);
-            clone.querySelector('.delete-button').addEventListener("click", deleteUser);
-            userContain.appendChild(clone);
+ function listUsers() {
+     try{
+        const userPromise = getJSON('/api/users');
+        const userTemp = document.querySelector("#user-template");
+        const userContain = document.getElementById("users-container");
+        userPromise.then(users => {
+            users.forEach(user => {
+                const clone = userTemp.content.cloneNode(true);  
+                clone.querySelector('.item-row').setAttribute('id', "user-"+user._id);
+                clone.querySelector('.user-name').setAttribute('id', "name-"+user._id);
+                clone.querySelector('.user-name').innerHTML = user.name;
+                clone.querySelector('.user-email').setAttribute('id', "email-"+user._id);
+                clone.querySelector('.user-email').innerHTML = user.email;
+                clone.querySelector('.user-role').setAttribute('id', "role-"+user._id);
+                clone.querySelector('.user-role').innerHTML = user.role;
+                clone.querySelector('.modify-button').setAttribute('id',"modify-"+user._id);
+                clone.querySelector('.modify-button').addEventListener("click", modifyUser);
+                clone.querySelector('.delete-button').setAttribute('id',"delete-"+user._id);
+                clone.querySelector('.delete-button').addEventListener("click", deleteUser);
+                userContain.appendChild(clone);
+            });
         });
-    });
- }
+      }catch{
+        createNotification("Only admins can view users...", "notifications-container", false);
+      }
+    }
+    
 
  /** TODO: 8.5 Updating/modifying and deleting existing users
  *       - Use postOrPutJSON() function from utils.js to send your data back to server
