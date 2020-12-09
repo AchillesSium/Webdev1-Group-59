@@ -5,12 +5,14 @@ Resposible for:
 - Connect front-end and back-end
 - Implement Es-lint and funtional programming rules
 - Handle API calls
+- Set url connections
 
 Member2:  Talha Manj, talha.manj@tuni.fi, 050365148
 Resposible for: 
 - Create entity models(order, product, user)
-- Implement Heroku 
-- Create own test
+- Heroku implementation
+- Font-end and Back-end implementation with authentication
+- Modify app with database
 
 
 
