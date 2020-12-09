@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-Command line Instructions
-1.Clone the webdev1-group-59 repository to your local.
-2.Create a README.md file
- touch README.md
-3.Add this file
- git add README.md
-4.Commit this file
- git commit -m "add README"
-5.Then push
- git push -u origin master
-=======
 # Group 
 
 Member1:  Mohammad Aqib Hassan, mohammad.hassan@tuni.fi, 050457535 
@@ -51,7 +39,8 @@ A web shop with vanilla HTML, CSS.
 │   └── user.js             --> User model     
 │                               
 ├── public                  --> Contains all the public files for clients
-│   ├── css  
+│   ├── img                 --> All diagram images
+│   ├── css                 --> Project's css files
 │   │    └── styles.css     --> Contains CSS that are used in the project                
 │   └── js                  --> Necessary scripts for html files
 │       ├── addProduct.js   --> Script for addProduct.html
@@ -101,4 +90,3 @@ TODO: list the security threats represented in the course slides.
 Document how your application protects against the threats.
 You are also free to add more security threats + protection here, if you will.
 
->>>>>>> fcd512a9c3494bbbbafecc75e42058a31e07037b
